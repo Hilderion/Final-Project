@@ -1,0 +1,259 @@
+.padding10 {
+	padding-bottom: 10px;
+}
+.border {
+    border: 1px solid gray;
+}
+.information {
+    background-color: white;
+    border-radius: 5px;
+}
+.picture {
+    background-color: white;
+    border-radius: 5px;
+    margin-top:10px;
+}
+.picture-img img {
+    width: 30%;
+    height:120px;
+    margin: 10px 3px 0px 5px;
+}
+.friend {
+    background-color: white;
+    border-radius: 5px;
+    margin-top:10px;
+}
+.recentcontainer {
+    border-radius: 5px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+  
+.recentcontainer .newpostheader,
+.recentcontainer .newpostfooter,
+.modal-footer .newpostfooter a {
+  padding: 4px 5px;
+  background: #ffffff;  
+}
+.recentcontainer .newpostheader a,
+.recentcontainer .newpostfooter a,
+.modal-footer .newpostfooter a,
+.recentcontainer .nav-justified a:first-child {
+  display: inline-block;
+  text-align: center;
+}
+.recentcontainer .newpostfooter a:first-child,
+.modal-footer .newpostfooter a {
+  float: left;
+}
+.recentcontainer .newpostfooter a:last-child {
+  float: right;
+}
+.recentcontainer .newpostheader a:first-child,
+.recentcontainer .newpostfooter a:first-child,
+.modal-footer .newpostfooter a:first-child {
+  margin-right: 5px;
+}
+.recentcontainer .newpostheader a,
+.recentcontainer .newpostfooter a,
+.modal-footer .newpostfooter a {
+  font-size: 14px;
+}
+.recentcontainer .newpostheader a img,
+.recentcontainer .newpostfooter a img,
+.modal-footer .newpostfooter a img {
+  width: 40px;
+  height: 40px;
+  margin: 5px 5px 0 5px;
+}
+.recentcontainer .newpostheader a .name,
+.recentcontainer .newpostfooter a .name,
+.modal-footer .newpostfooter a .name {
+  position: relative;
+  top: -6px;
+}
+.recentcontainer .newpostheader a .fa,
+.recentcontainer .newpostfooter a .fa,
+.modal-footer .newpostfooter a .fa {
+  display: inline-block;
+  margin: 5px;
+}
+.recentcontainer .newpostheader > span,
+.recentcontainer .newpostfooter > span,
+.modal-footer .newpostfooter > span {
+  position: relative;
+  top: -6px;
+  left: -4px;
+  font-size: 14px;
+}
+.recentcontainer .newpostheader p,
+.recentcontainer .newpostfooter p,
+.modal-footer .newpostfooter p {
+  position: relative;
+  top: -22px;
+  left: 55px;
+  font-size: 12px;
+}
+.recentcontainer .newpostheader p a,
+.recentcontainer .newpostfooter p a,
+.modal-footer .newpostfooter p a {
+  font-size: 12px;
+  color: #4b4f56;
+  margin-right: 5px;
+}
+.recentcontainer .newpostheader .rightsideofpost,
+.recentcontainer .newpostfooter .rightsideofpost {
+  position: relative;
+  top: -73px;
+  float: right;
+}
+.recentcontainer .newpostheader .rightsideofpost .personpostmenu,
+.recentcontainer .newpostfooter .rightsideofpost .personpostmenu {
+  color: #4b4f56;
+}
+.recentcontainer .newpostheader a,
+.recentcontainer .newpostfooter a,
+.modal-footer .newpostfooter a {
+  font-size: 14px;
+  color: #4b4f56;
+  margin-right: 5px;
+}
+.recentcontainer .newpostheader a .fa,
+.recentcontainer .newpostfooter a .fa,
+.modal-footer .newpostfooter a .fa {
+  display: inline-block;
+  margin: 5px;
+}
+.recentcontainer .community-counter {
+  padding: 4px 5px;
+  background: #ffffff;
+}
+.recentcontainer .community-counter a:first-child {
+    text-align: left;
+}
+.recentcontainer .community-counter a:last-child {
+    float: right
+}
+.recentcontainer .community-counter a {
+  font-size: 14px;
+  color: #4b4f56;
+  margin-right: 5px;
+}
+.recentcontainer .community-counter a .fa,.far {
+  display: inline-block;
+  margin: 5px;
+}
+.recentcontainer .newpost textarea,
+.recentcontainer .newpost .postcontent {
+  display: inherit;
+  padding: 10px;
+  width: 100%;
+  background: #ffffff;
+}
+.recentcontainer .newpost .postcontent {
+  font-size: 15px;
+  position: relative;
+  margin-top: -40px;
+  padding-bottom: 40px;
+}
+.recentcontainer .newpostfooter,
+.modal-footer .newpostfooter  {
+  margin-top: 1px;
+}
+.newpostfooter-contents a {
+    width: 30%;
+}
+.recentcontainer .commentpost {
+  display: inherit;
+  background: #ffffff;
+  margin-top: -1px;
+}
+.recentcontainer .commentpost img {
+  margin: 10px;
+  height: 40px;
+}
+.recentcontainer .commentpost .input-group-btn {
+  display: inline-block;
+  background: #fff;
+}
+.recentcontainer .commentpost .input-group-btn a {
+  margin-top: 10px;
+}
+.recentcontainer:nth-child(1) .newpostfooter a:nth-child(1) .fa,
+.modal-footer .newpostfooter a:nth-child(1) .fa {
+  color: #96b756;
+}
+.recentcontainer:nth-child(1) .newpostfooter a:nth-child(2) .fas,
+.modal-footer .newpostfooter a:nth-child(2) .fas {
+  color: #3b5e95;
+}
+.recentcontainer:nth-child(1) .newpostfooter a:last-child,
+.modal-footer .newpostfooter a:last-child {
+  font-size: 20px;
+}
+.newpostfooter-contents {
+  display: inline-block;
+  text-align:center;
+  width: 100%;
+}
+#image-board-label,
+#tag-board-label,
+#image-label,
+#tag-label{
+	display:inline-block;
+	padding: .4em .75em; 
+	color: #999; 
+	font-size: inherit; 
+	line-height: normal; 
+	vertical-align: middle; 
+	background-color: #fdfdfd; 
+	cursor: pointer; 
+	border: 1px solid #ebebeb; 
+	border-bottom-color: #e2e2e2; 
+	border-radius: .25em;
+	height:40px;
+}
+.tag-friendinfo,
+.tag-friend {
+	display:inline-block;
+	padding: .3em .75em; 
+	color: #999; 
+	font-size: inherit; 
+	line-height: normal; 
+	vertical-align: middle; 
+	background-color: #fdfdfd; 
+	cursor: pointer; 
+	border: 1px solid #ebebeb; 
+	border-bottom-color: #e2e2e2; 
+	border-radius: .25em;
+	margin-bottom : 0;
+}
+.newpostfooter input[type="file"] {
+	position: absolute; 
+	width: 1px; 
+	height: 1px; 
+	padding: 0; 
+	margin: -1px; 
+	overflow: hidden; 
+	clip:rect(0,0,0,0); 
+	border: 0;
+}
+#board-open-range {
+	width: 100px;
+    height: 30px;
+    padding-left: 10px;
+    font-size: 18px;
+    border: 1px solid gray;
+    border-radius: 3px;
+    text-align-last:center;
+    margin-right:10px;
+}
+#board-open-range option:checked, 
+#board-open-range option:hover {    
+    background: darkgray; 
+    color: #fff;
+}
+.mBottom10 {
+	margin-bottom:10px;
+}
+

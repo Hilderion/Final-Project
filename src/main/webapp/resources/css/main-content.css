@@ -1,0 +1,240 @@
+.main-content {
+  margin-top: 60px;
+  background: #dddfe2;
+    float: left;    
+}
+.mBottom10 {
+	margin-bottom:10px;
+}
+.main-content .recentcontainer {
+  border-radius: 5px;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+.main-content .recentcontainer .newpostheader,
+.main-content .recentcontainer .newpostfooter,
+.modal-footer .newpostfooter {
+  padding: 4px 5px;
+  background: #ffffff;
+  
+}
+.main-content .recentcontainer .newpostheader a,
+.main-content .recentcontainer .newpostfooter a,
+.modal-footer .newpostfooter a,
+.main-content .recentcontainer .nav-justified a:first-child {
+  display: inline-block;
+  text-align: center;
+}
+.main-content .recentcontainer .newpostfooter a:first-child,
+.modal-footer .newpostfooter a:first-child {
+  float: left;
+}
+.main-content .recentcontainer .newpostfooter a:last-child{
+  float: right;
+}
+.main-content .recentcontainer .newpostheader a:first-child,
+.main-content .recentcontainer .newpostfooter a:first-child,
+.modal-footer .newpostfooter a:first-child {
+  margin-right: 5px;
+}
+.main-content .recentcontainer .newpostheader a,
+.main-content .recentcontainer .newpostfooter a,
+.modal-footer .newpostfooter a {
+  font-size: 14px;
+}
+.main-content .recentcontainer .newpostheader a img,
+.main-content .recentcontainer .newpostfooter a img,
+.modal-footer .newpostfooter a img {
+  width: 40px;
+  height: 40px;
+  margin: 5px 5px 0 5px;
+}
+.main-content .recentcontainer .newpostheader a .name,
+.main-content .recentcontainer .newpostfooter a .name,
+.modal-footer .newpostfooter a .name {
+  position: relative;
+  top: -6px;
+}
+.main-content .recentcontainer .newpostheader a .fa,
+.main-content .recentcontainer .newpostfooter a .fa,
+.modal-footer .newpostfooter a .fa {
+  display: inline-block;
+  margin: 5px;
+}
+.main-content .recentcontainer .newpostheader > span,
+.main-content .recentcontainer .newpostfooter > span,
+.modal-footer .newpostfooter > span {
+  position: relative;
+  top: -6px;
+  left: -4px;
+  font-size: 14px;
+}
+.main-content .recentcontainer .newpostheader p,
+.main-content .recentcontainer .newpostfooter p,
+.modal-footer .newpostfooter p {
+  position: relative;
+  top: -22px;
+  left: 55px;
+  font-size: 12px;
+}
+.main-content .recentcontainer .newpostheader p a,
+.main-content .recentcontainer .newpostfooter p a,
+.modal-footer .newpostfooter p a {
+  font-size: 12px;
+  color: #4b4f56;
+  margin-right: 5px;
+}
+.main-content .recentcontainer .newpostheader .rightsideofpost,
+.main-content .recentcontainer .newpostfooter .rightsideofpost {
+  position: relative;
+  top: -73px;
+  float: right;
+}
+.main-content .recentcontainer .newpostheader .rightsideofpost .personpostmenu,
+.main-content .recentcontainer .newpostfooter .rightsideofpost .personpostmenu {
+  color: #4b4f56;
+}
+.main-content .recentcontainer .newpostheader a,
+.main-content .recentcontainer .newpostfooter a,
+.modal-footer .newpostfooter a {
+  font-size: 14px;
+  color: #4b4f56;
+  margin-right: 5px;
+}
+.main-content .recentcontainer .newpostheader a .fa,
+.main-content .recentcontainer .newpostfooter a .fa
+.modal-footer .newpostfooter a .fa {
+  display: inline-block;
+  margin: 5px;
+}
+.main-content .recentcontainer .community-counter {
+  padding: 4px 5px;
+  background: #ffffff;
+}
+.main-content .recentcontainer .community-counter a:first-child {
+    text-align: left;
+}
+.main-content .recentcontainer .community-counter a:last-child {
+    float: right
+}
+.main-content .recentcontainer .community-counter a {
+  font-size: 14px;
+  color: #4b4f56;
+  margin-right: 5px;
+}
+.main-content .recentcontainer .community-counter a .fa,.far {
+  display: inline-block;
+  margin: 5px;
+}
+.main-content .recentcontainer .newpost textarea,
+.main-content .recentcontainer .newpost .postcontent {
+  display: inherit;
+  padding: 10px;
+  width: 100%;
+  background: #ffffff;
+}
+.main-content .recentcontainer .newpost .postcontent {
+  font-size: 15px;
+  position: relative;
+  margin-top: -40px;
+}
+.main-content .recentcontainer .newpostfooter,
+.modal-footer .newpostfooter {
+  margin-top: 1px;
+}
+.main-content .recentcontainer .commentpost {
+  display: inherit;
+  background: #ffffff;
+  margin-top: -1px;
+}
+.main-content .recentcontainer .commentpost img {
+  margin: 10px;
+  height: 40px;
+}
+.main-content .recentcontainer .commentpost .input-group-btn {
+  display: inline-block;
+  background: #fff;
+}
+.main-content .recentcontainer .commentpost .input-group-btn a {
+  margin-top: 10px;
+}
+.main-content .recentcontainer:nth-child(1) .newpostfooter a:nth-child(1) .fa,
+.modal-footer .newpostfooter a:nth-child(1) .fa {
+  color: #96b756;
+}
+.main-content .recentcontainer:nth-child(1) .newpostfooter a:nth-child(2) .fas,
+.modal-footer .newpostfooter a:nth-child(2) .fas {
+  color: #3b5e95;
+}
+.main-content .recentcontainer:nth-child(1) .newpostfooter a:last-child,
+.modal-footer .newpostfooter a:last-child {
+  font-size: 20px;
+}
+.newpostfooter-contents {
+  display: inline-block;
+  text-align:center;
+  width: 100%;
+}
+.newpostfooter-contents a{
+	width: 30%;
+}
+#img-board-label,
+#tag-board-label,
+#img-label,
+#tag-label{
+	display:inline-block;
+	padding: .4em .75em; 
+	color: #999; 
+	font-size: inherit; 
+	line-height: normal; 
+	vertical-align: middle; 
+	background-color: #fdfdfd; 
+	cursor: pointer; 
+	border: 1px solid #ebebeb; 
+	border-bottom-color: #e2e2e2; 
+	border-radius: .25em;
+	height:40px;
+}
+.tag-friendinfo,
+.tag-friend {
+	display:inline-block;
+	padding: .3em .75em; 
+	color: #999; 
+	font-size: inherit; 
+	line-height: normal; 
+	vertical-align: middle; 
+	background-color: #fdfdfd; 
+	cursor: pointer; 
+	border: 1px solid #ebebeb; 
+	border-bottom-color: #e2e2e2; 
+	border-radius: .25em;
+	margin-bottom : 0;
+}
+.newpostfooter input[type="file"] {
+	position: absolute; 
+	width: 1px; 
+	height: 1px; 
+	padding: 0; 
+	margin: -1px; 
+	overflow: hidden; 
+	clip:rect(0,0,0,0); 
+	border: 0;
+}
+#board-open-range,
+#open-range {
+	width: 130px;
+    height: 30px;
+    padding-left: 10px;
+    font-size: 18px;
+    border: 1px solid gray;
+    border-radius: 3px;
+    text-align-last:center;
+    margin-right:10px;
+}
+#board-open-range option:checked,
+#open-range option:checked, 
+#board-open-range option:hover,
+#open-range option:hover {    
+    background: darkgray; 
+    color: #fff;
+}

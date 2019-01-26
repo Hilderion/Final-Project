@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.fa.dao.BoardDao">
+
+	<resultMap type="BoardMedia" id="getBoardMediaResult">
+		<id column="media_no" property="no"/>
+		<result column="media_name" property="name"/>
+		<result column="media_event" property="event"/>
+		<association property="user" column="user_no" javaType="User" select="kr.co.fa.dao.UserDao.getUserByUserNo"/>
+		<association property="board" column="board_no" javaType="Board" select="getBoardByNo"/>
+		<collection property="tags" column="board_no" javaType="java.util.ArrayList" ofType="Tag" select="getTagsByBoardNo"/>
+				
+	</resultMap>
+	<resultMap type="Board" id="getUserBoardsResultMap">
+		<id column="board_no" property="no"/>
+		<result column="board_contents" property="contents"/>
+		<result column="board_create_date" property="createDate"/>
+		<result column="board_media_check" property="mediaCheck"/>
+		<result column="board_open_range" property="openRange"/>
+		<result column="board_available" property="available"/>
+		<result column="board_like" property="like"/>
+		<result column="board_rep_count" property="repCount"/>
+		<association property="user" column="user_no" javaType="User" select="kr.co.fa.dao.UserDao.getUserByUserNo"/>
+		<association property="share" column="share_no" javaType="Board" select="getShareBoardByShareNo"/>
+		<association property="event" column="{userNo=user_no,boardNo=board_no}" javaType="Like" select="getLikeCheckByUserNo"/>
+		<collection property="boardMedias" column="BOARD_NO" javaType="java.util.ArrayList" ofType="BoardMedia" select="getBoardMediaByBoardNo"/>
+		<collection property="tags" column="board_no" javaType="java.util.ArrayList" ofType="Tag" select="getTagsByBoardNo"/>
+	</resultMap>
+	<resultMap type="Board" id="getShareBoardResultMap">
+		<id column="board_no" property="no"/>
+		<result column="board_contents" property="contents"/>
+		<result column="board_create_date" property="createDate"/>
+		<result column="board_media_check" property="mediaCheck"/>
+		<result column="board_open_range" property="openRange"/>
+		<result column="board_available" property="available"/>
+		<result column="board_like" property="like"/>
+		<result column="board_rep_count" property="repCount"/>
+		<association property="user" column="user_no" javaType="User" select="kr.co.fa.dao.UserDao.getUserByUserNo"/>
+		<collection property="boardMedias" column="BOARD_NO" javaType="java.util.ArrayList" ofType="BoardMedia" select="getBoardMediaByBoardNo"/>
+	</resultMap>
+	
+	<select id="getTagsByBoardNo" parameterType="int" resultType="Tag">
+		select
+			BOARD_NO			as "board.no",
+			USER_NO				as "user.no",
+			TAG_EVENT			as event,
+			TAG_CONTENTS		as contents
+		from
+			tag
+		where
+			board_no = #{value}
+	</select>
+	<select id="getReplyInfoByBoardNo" parameterType="int" resultType="Reply">
+		select distinct
+			B.USER_NO			as "user.no",
+			B.user_name			as "user.name"
+		from
+			reply A, sns_users B
+		where
+			A.user_no = B.user_no
+		and
+			A.board_no = #{value}
+	</select>
+	<select id="getLikeInfoByBoardNo" parameterType="int" resultType="Like">
+		select
+			A.like_no			as no,
+			B.user_no			as "user.no",
+			B.user_name			as "user.name",
+			A.like_date			as "date",
+			A.like_event		as event,
+			A.like_event_no		as eventNo
+		from
+			likes A, sns_users B
+		where
+			like_event = 'board'
+		and
+			like_event_no = #{value}
+		and
+			A.user_no = B.user_no		
+	</select>
+	<select id="getLikeCheckByUserNo" parameterType="Map" resultType="Like">
+		select
+			like_no				as no,
+			user_no				as "user.no",
+			like_date			as "date",
+			like_event			as event,
+			like_event_no		as eventNo
+		from
+			likes
+		where
+			user_no = #{userNo}
+		and
+			like_event_no = #{boardNo}
+	</select>
+	
+	<insert id="addTag" parameterType="Tag">
+		<selectKey keyProperty="board.no" resultType="int" order="BEFORE">
+			select board_seq.currval from dual 
+		</selectKey>
+		insert into tag
+			(board_no, user_no, tag_event, tag_contents)
+		values
+			(#{board.no}, #{user.no}, #{event}, #{contents})
+	</insert>
+	<insert id = "addMedia" parameterType="BoardMedia">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select board_seq.currval from dual 
+		</selectKey>
+		insert into board_media
+			(media_no, board_no, user_no, media_name, media_event)
+		values
+			(board_media_seq.nextval, #{no}, #{user.no}, #{name}, #{event})
+	</insert>
+	<insert id = "addBoard" parameterType="Board">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select board_seq.nextval from dual 
+		</selectKey>
+		insert into board
+			(BOARD_NO, USER_NO, BOARD_CONTENTS, BOARD_MEDIA_CHECK, BOARD_OPEN_RANGE)
+		values
+			(#{no}, #{user.no}, #{contents}, #{mediaCheck}, #{openRange})
+	</insert>
+	
+	<insert id = "addPageBoard" parameterType="Board">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select board_seq.nextval from dual 
+		</selectKey>
+		insert into board
+			(BOARD_NO, USER_NO, BOARD_CONTENTS, BOARD_MEDIA_CHECK, BOARD_OPEN_RANGE)
+		values
+			(#{no}, #{user.no}, #{contents}, #{mediaCheck}, #{openRange})
+	</insert>
+	
+	<select id="getUserMedias" parameterType="int" resultType="BoardMedia">
+		select
+			media_no				as no,
+			board_no				as "board.no",
+			user_no					as "user.no",
+			media_name				as name,
+			media_event				as event
+		from
+			board_media
+		where
+			user_no = #{value}
+		order by 
+			media_no desc
+	</select>
+	
+	
+	
+	<select id="getUserMainBoards" parameterType="int" resultMap="getUserBoardsResultMap">
+		select
+			A.BOARD_NO,
+			A.USER_NO,
+			A.BOARD_CONTENTS,
+			A.BOARD_CREATE_DATE,
+			A.BOARD_MEDIA_CHECK,
+			A.BOARD_OPEN_RANGE,
+			A.BOARD_AVAILABLE,
+			A.BOARD_LIKE,
+			A.SHARE_NO,
+			A.BOARD_REP_COUNT,
+			C.like_event_no
+		from 
+			board A, follow B, likes C
+		where
+			A.user_no = B.friend_no
+		and
+			B.user_no = #{value}
+		and
+			A.board_no = C.like_event_no(+)
+		and
+			A.board_available = 'Y'
+		and
+			A.board_open_range in ('A', 'F')
+	union
+		select
+			A.BOARD_NO,
+			A.USER_NO,
+			A.BOARD_CONTENTS,
+			A.BOARD_CREATE_DATE,
+			A.BOARD_MEDIA_CHECK,
+			A.BOARD_OPEN_RANGE,
+			A.BOARD_AVAILABLE,
+			A.BOARD_LIKE,
+			A.SHARE_NO,
+			A.BOARD_REP_COUNT,
+			C.like_event_no
+		from 
+			board A, board B, likes C
+		where
+			A.share_no = B.board_no(+)
+		and
+			A.board_no = C.like_event_no(+)
+		and
+			A.user_no = #{value}
+		and
+			A.board_available = 'Y'
+		order by
+			board_no desc
+	</select>
+	
+	<select id="getBoardMediaByBoardNo" parameterType="int" resultType="BoardMedia">
+		select 
+			MEDIA_NO as no,
+			BOARD_NO as "board.no",
+			USER_NO as "user.no",
+			MEDIA_NAME as name,
+			MEDIA_EVENT as event
+		from
+			board_media
+		where
+			board_no = #{value}
+	</select>
+	<select id="getShareBoardByShareNo" parameterType="int" resultMap="getShareBoardResultMap">
+		select
+			BOARD_NO,
+			USER_NO,	
+			BOARD_CONTENTS,		
+			BOARD_CREATE_DATE,
+			BOARD_MEDIA_CHECK,
+			BOARD_OPEN_RANGE,
+			BOARD_AVAILABLE,
+			BOARD_LIKE,
+			BOARD_REP_COUNT
+		from
+			board
+		where
+			board_no = #{value}
+	</select>
+	
+	<select id="getUserBoards" parameterType="int" resultMap="getUserBoardsResultMap">
+		select
+			A.BOARD_NO,
+			A.USER_NO,
+			A.BOARD_CONTENTS,
+			A.BOARD_CREATE_DATE,
+			A.BOARD_MEDIA_CHECK,
+			A.BOARD_OPEN_RANGE,
+			A.BOARD_AVAILABLE,
+			A.BOARD_LIKE,
+			A.SHARE_NO,
+			A.BOARD_REP_COUNT
+		from 
+			board A, board B
+		where
+			A.share_no = B.board_no(+)
+		and
+			A.user_no = #{value}
+		and
+			A.board_available = 'Y'
+		order by A.board_create_date desc
+	</select>
+	
+ 	<insert id="addUserBoards" parameterType="Board">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select board_seq.nextval from dual 
+		</selectKey>
+		insert into board
+			(BOARD_NO, USER_NO, BOARD_CONTENTS, BOARD_MEDIA_CHECK, BOARD_OPEN_RANGE, SHARE_NO)
+		values(#{no}, #{user.no}, #{contents}, #{mediaCheck}, #{openRange}, #{share.no})
+	</insert> 
+
+	<select id="getBoardByNo" parameterType="int" resultMap="getUserBoardsResultMap">
+		select
+			A.BOARD_NO,
+			A.USER_NO,
+			A.BOARD_CONTENTS,
+			A.BOARD_CREATE_DATE,
+			A.BOARD_MEDIA_CHECK,
+			A.BOARD_OPEN_RANGE,
+			A.BOARD_AVAILABLE,
+			A.BOARD_LIKE,
+			A.SHARE_NO,
+			A.BOARD_REP_COUNT
+		from 
+			board A, board B
+		where
+			A.share_no = B.board_no(+)
+		and
+			A.board_no = #{value}
+		and
+			A.board_available = 'Y'
+		order by
+			board_no desc
+	</select>
+	
+	<select id="getFriendOfUser" parameterType="Criteria" resultType="User">
+		select 
+			A.user_no			as no, 
+			A.user_name			as name,
+			A.user_email		as email,
+			A.user_password		as password,
+			A.user_birth		as birth, 
+			A.user_sex			as sex, 
+			A.user_available	as available, 
+			A.user_create_date	as createDate,
+			A.user_profile		as profile,
+			C.user_count		as friendCount
+		from 
+			sns_users A, friend B, (select user_no , count(*) as user_count
+									from FRIEND
+									group by user_no ) C
+		where 
+			A.user_no = B.friend_no
+		and
+			A.user_no = C.user_no
+		and
+			B.ano_check != 'D'
+		and 
+			B.user_no = #{userNo}
+		<if test="keyword != null and event == 'friend'">
+			and A.user_name like #{keyword} || '%'
+		</if>
+		<if test="keyword != null and event == 'tag'">
+			and A.user_name like #{keyword} || '%'
+		</if>
+		<if test="keyword == null and event == 'tag'">
+			and A.user_name like #{keyword}
+		</if>
+		
+	</select>
+	
+	<select id="getFollowingOfUser" parameterType="Criteria" resultType="User">
+		select 
+			A.user_no			as no, 
+			A.user_name			as name,
+			A.user_email		as email,
+			A.user_password		as password,
+			A.user_birth		as birth, 
+			A.user_sex			as sex, 
+			A.user_available	as available, 
+			A.user_create_date	as createDate,
+			A.user_profile		as profile,
+			nvl (C.user_count, 0)		as friendCount
+		from 
+			sns_users A, follow B, (select user_no , count(*) as user_count
+									from FRIEND
+									group by user_no ) C
+		where 
+			A.user_no = B.friend_no
+		and
+			A.user_no = C.user_no(+)
+		and 
+			B.user_no = #{userNo}
+	</select>
+	
+	<select id="getFollowerOfUser" parameterType="Criteria" resultType="User">
+		select 
+			A.user_no			as no, 
+			A.user_name			as name,
+			A.user_email		as email,
+			A.user_password		as password,
+			A.user_birth		as birth, 
+			A.user_sex			as sex, 
+			A.user_available	as available, 
+			A.user_create_date	as createDate,
+			A.user_profile		as profile,
+			nvl (C.user_count, 0)		as friendCount
+		from 
+			sns_users A, follow B, (select user_no , count(*) as user_count
+									from FRIEND
+									group by user_no ) C
+		where 
+			A.user_no = B.user_no
+		and
+			A.user_no = C.user_no(+)
+		and
+			B.friend_no = #{userNo}
+	</select>
+	
+	<update id="updateAllUserBoardOpenRange" parameterType="Criteria">
+		update
+			board
+		set
+			board_open_range = #{openRange}
+		where
+			user_no = #{userNo}
+	</update>
+	
+	<update id="updateSelectedUserBoardOpenRange" parameterType="Criteria">
+		update
+			board
+		set
+			board_open_range = #{openRange}
+		where
+			user_no = #{userNo}
+		and
+			board_no = #{boardNo}
+	</update>
+	
+	<select id="getUserInfoByKeyword" parameterType="Criteria" resultType="User">
+		select 
+			user_no 			as no,
+			user_name			as name,
+			user_profile		as profile,
+			USER_COVER			as cover
+		from 
+			sns_users
+		where 
+			user_no != #{userNo}
+		and
+			parent_no is null
+		AND
+			USER_AVAILABLE = 'Y'
+		and
+			user_name like #{keyword} || '%'
+	</select>
+	
+	<select id="getPageInfoByKeyword" parameterType="Criteria" resultType="User">
+		SELECT 
+			user_no          as no, 
+			user_name        as name,
+			user_email       as email,
+			user_password    as password,
+			user_birth       as birth, 
+			user_sex         as sex, 
+			user_available   as available, 
+			user_create_date as createDate,
+			user_profile     as profile,
+			user_cover       as cover,
+			USER_TEL		 as tel, 
+			PAGE_NAME		 as pageName, 
+			PARENT_NO		 as parentNo, 
+			PAGE_CATEGORY	 as category
+		FROM 
+			SNS_USERS
+		where
+			parent_no != #{userNo}
+		and	
+			page_name like #{keyword} || '%'
+	</select>
+	
+	<select id="getBoardInfoByKeyword" parameterType="Criteria" resultMap="getUserBoardsResultMap">
+		select
+			A.BOARD_NO,
+			A.USER_NO,
+			A.BOARD_CONTENTS,
+			A.BOARD_CREATE_DATE,
+			A.BOARD_MEDIA_CHECK,
+			A.BOARD_OPEN_RANGE,
+			A.BOARD_AVAILABLE,
+			A.BOARD_LIKE,
+			A.SHARE_NO,
+			A.BOARD_REP_COUNT
+		from
+			board A, board B
+		where
+			A.share_no = B.board_no(+)
+		and
+			A.BOARD_CONTENTS like #{keyword} || '%' 
+	</select>
+	
+ 	<insert id = "addLike" parameterType="Like">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select board_seq.nextval from dual 
+		</selectKey>
+		insert into LIKES
+			(LIKE_NO, USER_NO, LIKE_DATE, LIKE_EVENT, LIKE_EVENT_NO)
+		values
+			(#{no}, #{user.no}, sysdate, #{event}, #{eventNo})
+	</insert>
+
+	<delete id="deleteLike" parameterType="Like">
+		DELETE 
+			FROM LIKES
+		where
+			user_no = #{user.no}
+		and
+			LIKE_EVENT_NO = #{eventNo}
+	</delete>
+	
+	<update id="updateBoardLike" parameterType="Board">
+		UPDATE 
+			BOARD
+		SET  
+		    BOARD_CONTENTS    = #{contents}, 
+		    BOARD_MEDIA_CHECK = #{mediaCheck}, 
+		    BOARD_OPEN_RANGE  = #{openRange}, 
+		    BOARD_AVAILABLE   = #{available}, 
+		    BOARD_LIKE        = #{like}, 
+		    BOARD_REP_COUNT   = #{repCount}
+		WHERE
+			Board_no = #{no}
+	</update>
+
+	<select id="getLikePageOfUser" parameterType="int" resultType="User">
+		SELECT
+			A.user_profile		as profile,
+			A.PAGE_NAME			as pageName, 
+			A.PARENT_NO			as parentNo, 
+			A.PAGE_CATEGORY		as category
+		FROM 
+			SNS_USERS A, likes B
+		WHERE
+			A.user_no = B.like_event_no
+		and
+			B.user_no = #{value}
+		AND
+			A.parent_no is not null
+		and
+			B.like_event = 'page'
+	</select>
+	
+	<update id="updateUserInfo" parameterType="User">
+		UPDATE 
+			sns_users
+		SET  
+			user_address   =   #{address}, 
+			user_education =   #{education},
+			user_tel       =   #{tel}
+		WHERE
+			user_no = #{no}
+	</update>
+	
+	<select id="getReplyOfBoard" parameterType="int" resultType="Board">
+		select
+			A.BOARD_NO				as no,
+			C.user_PROFILE			as "user.profile",
+			C.user_no				as "user.no",
+			C.user_name				as "user.name",
+			B.REPLY_CONTENTS		as "reply.contents",
+			B.REPLY_NO				as "reply.no",
+			B.REPLY_DATE			as "date",
+			B.REPLY_PARENT_NO		as "reply.parentNo"
+		from 
+			board A, reply B, SNS_USERS C
+		where
+			A.board_no = B.board_no
+		AND
+			B.user_no = C.user_no
+		and
+			A.board_available = 'Y'
+		and
+			A.board_no = #{value}
+		 order by 
+		 	B.REPLY_PARENT_NO asc, B.REPLY_NO asc 
+	</select>
+	
+ 	<insert id = "addReplyOfBoard" parameterType="Reply">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select board_seq.nextval from dual 
+		</selectKey>
+			INSERT INTO REPLY 
+				(REPLY_NO, BOARD_NO, REPLY_CONTENTS, REPLY_DATE, USER_NO, REPLY_PARENT_NO, REPLY_CHILD_CHECK, REPLY_SEQUENCE, REPLY_AVAILABLE)
+			VALUES  
+				(#{no}, #{board.no}, #{contents}, sysdate, #{user.no}, #{no}, 0, 1, 'Y')
+	</insert>
+	
+ 	<insert id = "addReplyOfReply" parameterType="Reply">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select board_seq.nextval from dual 
+		</selectKey>
+			INSERT INTO REPLY 
+				(REPLY_NO, BOARD_NO, REPLY_CONTENTS, REPLY_DATE, USER_NO, REPLY_PARENT_NO, REPLY_CHILD_CHECK, REPLY_SEQUENCE, REPLY_AVAILABLE)
+			VALUES  
+				(#{no}, #{board.no}, #{contents}, sysdate, #{user.no}, #{parent.no}, 1, #{sequence}, 'Y')
+	</insert>
+	
+	<select id = "maxSequenceOfReply" parameterType="int" resultType="int">
+		select 
+			nvl (max(reply_sequence), 0) as maxSequence
+		from 
+			reply
+		where
+			reply_parent_no = #{value}
+	</select>
+	
+	<select id="getNewReply" parameterType="int" resultType="Reply">
+		select 
+			A.reply_no			as no, 
+			A.board_no			as "board.no", 
+			A.REPLY_CONTENTS		as "contents", 
+			A.reply_date			as "date", 
+			A.user_no				as "user.no", 
+			A.REPLY_PARENT_NO		as "parentNo", 
+			A.REPLY_CHILD_CHECK	as "childCheck", 
+			A.REPLY_SEQUENCE		as sequence,
+			B.user_PROFILE			as "user.profile",
+			B.user_no				as "user.no",
+			B.user_name				as "user.name"
+		from (
+				select
+						reply_no	, 
+						board_no, 
+						REPLY_CONTENTS, 
+						reply_date, 
+						user_no, 
+						REPLY_PARENT_NO, 
+						REPLY_CHILD_CHECK, 
+						REPLY_SEQUENCE
+				from 
+					reply
+				where  
+					board_no = #{value}
+				order by 
+					reply_date desc) A, sns_users B
+		where
+			A.user_no = B.user_no
+		and
+			rownum = 1
+	</select>
+	<select id="getMediaDetailByBoardNo" parameterType="int" resultMap="getBoardMediaResult">
+		select 
+			MEDIA_NO,
+			BOARD_NO,
+			USER_NO,
+			MEDIA_NAME,
+			MEDIA_EVENT
+		from 
+			board_media 
+		where 
+			media_no = #{value}
+		
+	</select>
+	
+ 	<select id="getReplyOfReplyByReplyNo" parameterType="Reply" resultType="Reply">
+		select
+			C.board_no				as "board.no",
+			B.user_PROFILE			as "user.profile",
+			B.user_no				as "user.no",
+			B.user_name				as "user.name",
+			C.REPLY_CONTENTS		as contents,
+			C.REPLY_NO				as no,
+			C.REPLY_PARENT_NO		as "parent.no",
+			C.REPLY_DATE			as "date"
+		from 
+			board A, SNS_USERS B, reply C, reply D
+		where
+			A.board_no = C.board_no
+		AND
+			B.user_no = C.user_no
+		AND
+			C.reply_parent_no = D.reply_no
+		and
+			A.board_available = 'Y'
+		and
+			C.reply_parent_no = #{parent.no}
+		order by 
+			C.reply_date asc
+	</select>
+	
+	<select id="getBoardMedia" parameterType="int" resultMap="getBoardMediaResult">
+		select 
+			MEDIA_NO,
+			BOARD_NO,
+			USER_NO,
+			MEDIA_NAME,
+			MEDIA_EVENT
+		from 
+			board_media 
+		where 
+			user_no = #{value}
+	</select>
+	
+	<select id="getFriendBirthInfoByUser" parameterType="int" resultType="User">
+		select 
+			A.user_no as no, 
+			A.user_name as name, 
+			A.user_profile as profile, 
+			A.user_birth	as birth,
+			to_char(sysdate, 'DD') as nowday, 
+			substr(user_birth, 9, 2) as userBirthday
+		from 
+			SNS_USERS A, friend B
+		where 
+			<![CDATA[to_date(substr(user_birth, 6), 'mm-dd') > sysdate -1]]>
+		and 
+			<![CDATA[to_date(substr(user_birth, 6), 'mm-dd') < sysdate + 7]]>
+		and	
+			A.user_no = B.friend_no
+		and
+			B.ano_check != 'D'
+		and 
+			B.user_no = #{value}
+		order by
+			A.user_birth asc
+	</select>
+	
+	<select id="getBoardMediasByBoardNo" parameterType="int" resultType="BoardMedia">
+		select
+			media_no				as no,
+			board_no				as "board.no",
+			user_no					as "user.no",
+			media_name				as name,
+			media_event				as event
+		from
+			board_media
+		where
+			board_no = #{value}
+		order by 
+			media_no desc
+	</select>
+</mapper>

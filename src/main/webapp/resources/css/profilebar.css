@@ -1,0 +1,117 @@
+
+.header {
+  margin-top:43px;
+  height: 200px;
+  width: 100%;
+  background-size: 945px 200px;
+  
+}
+.header-menu {
+    height: 50px;
+    width: 100%;
+    background-color: white;
+}
+.header-menu li {
+  list-style: none;
+  float: left;
+  line-height: 50px;
+  vertical-align: middle;
+  text-align: center;
+}
+.header-menu li a {
+    color: black;
+    display: block;
+    width:100px;
+    font-size: 13px;
+    text-decoration: none;
+}
+.header-menu li:hover {
+    text-decoration: none;
+    background-color: darkgrey;
+}
+.header .image-cover {
+    float: left;
+    border: 1px solid white;
+    color: white;
+}
+.header .image-rpofile {
+  float:left;
+}
+.header .image-profile img {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  margin-right: 9px;
+  
+}
+.header .header-name {
+    color:white;
+}
+
+#cover-send {
+	display: none;
+	position: relative;
+	margin-left: 800px;
+}
+
+#cover-cancel {
+	display: none;
+}
+#btn-allim-Y {
+	font-weight: bolder;
+		
+}
+#from {
+	z-index: 50; 
+	position: relative; 
+	bottom: 19px;
+}
+#blah {
+	z-index: 30; 
+	display: none;"
+}
+#img {
+	opacity: 0; 
+}
+#img-label {
+	position:relative;
+	bottom: 23px; 
+	border: 2px solid; 
+	background-color: #87CEFA; 
+	cursor: pointer;
+}
+#profile {
+	border-radius: 50%; 
+	position:relative; 
+	margin-left:50px; 
+	margin-top: -5px; 
+	width: 125px; 
+	height: 125px;
+}
+#profile-label {
+	position:relative; 
+	margin-left:72px; 
+	bottom: 60px; 
+	border: 2px solid; 
+	background-color: white;  
+	width: 80px; 
+	height: 25px; 
+	cursor: pointer; 
+	display: none;
+}
+#name {
+	position:relative; 
+	margin-left: 180px; 
+	bottom: 70px; 
+	z-index: 50;
+}
+.right-button {
+	margin-right :150px;
+	margin-top: -60px;
+}
+#friend-menu {
+	top:auto;
+	left:auto;
+	right:auto;
+	
+}

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="kr.co.fa.dao.RepUserDao">
+	<select id="getTotalRows" resultType="int" parameterType="RepBoardCriteria">
+		select
+			count(*)
+		from
+			sns_users
+		<where>
+			<if test="opt != null">
+				<choose>
+					<when test="opt == 'male'">
+						user_sex = 'M'
+					</when>				
+					<when test="opt == 'female'">
+						user_sex = 'F'
+					</when>				
+				</choose>
+			</if>
+			<if test="status != null">
+				and user_available = #{status}
+			</if>
+			<if test="keyword != null">
+				<choose>
+					<when test="searchOpt == 'name'">
+						and user_name like '%' || #{keyword} || '%'
+					</when>
+					<when test="searchOpt == 'id'">
+						and user_email like '%' || #{keyword} || '%'
+					</when>
+				</choose>
+			</if>
+		</where>
+		order by
+			user_no desc		
+	</select>
+	
+	<select id="getUserList" parameterType="RepBoardCriteria" resultType="User">
+		select 
+			user_no          as no, 
+			user_name        as name,
+			user_email       as email,
+			user_password    as password,
+			user_birth       as birth, 
+			user_sex         as sex, 
+			user_available   as available, 
+			user_create_date as createDate 
+		from 
+			(
+				select
+					A.*,
+					row_number() over (order by user_no desc) rn
+				from
+					sns_users A
+				<where>
+					<if test="opt != null">
+						<choose>
+							<when test="opt == 'male'">
+								user_sex = 'M'
+							</when>				
+							<when test="opt == 'female'">
+								user_sex = 'F'
+							</when>				
+						</choose>
+					</if>
+					<if test="status != null">
+						and user_available = #{status}
+					</if>
+					<if test="keyword != null">
+						<choose>
+							<when test="searchOpt == 'name'">
+								and user_name like '%' || #{keyword} || '%'
+							</when>
+							<when test="searchOpt == 'id'">
+								and user_email like '%' || #{keyword} || '%'
+							</when>
+						</choose>
+					</if>
+				</where>
+			)
+		where
+			rn >= #{beginIndex} and rn &lt;= #{endIndex}	
+		order by
+			user_no desc	
+	</select>
+	
+	<select id="getUserByNo" parameterType="int" resultType="User">
+		select 
+			user_no          as no, 
+			user_name        as name,
+			user_email       as email,
+			user_password    as password,
+			user_birth       as birth, 
+			user_sex         as sex, 
+			user_available   as available, 
+			user_create_date as createDate,
+			user_education	 as education,
+			user_address	 as address,
+			user_profile	 as profile,
+			user_tel	     as tel,
+			page_name		 as pageName,
+			page_category	 as category
+		from
+			sns_users
+				 
+		where
+			user_no = #{value}		
+	</select>
+	
+</mapper>

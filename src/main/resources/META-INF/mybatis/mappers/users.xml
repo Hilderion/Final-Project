@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper	namespace="kr.co.fa.dao.UserDao">
+	<select id="friendCheck" parameterType="Criteria" resultType="Friend">
+		select
+			user_no					as "user.no",
+			friend_no				as no,
+			ano_check				as anoCheck
+		from
+			friend
+		where
+			user_no = #{userNo}
+		and
+			friend_no = #{friendNo}
+	</select>
+	<insert id="addUser" parameterType="User">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select user_seq.nextval from dual 
+		</selectKey>
+		insert into sns_users
+		(user_no, user_name, user_email, user_password, user_birth, user_sex, user_available, user_create_date, user_profile, user_cover)
+		values 
+		(#{no}, #{name}, #{email}, #{password}, #{birth}, #{sex},'Y', sysdate, #{profile}, #{cover} )
+	</insert>
+	
+	<select id="getUserByEmail" parameterType="String" resultType="User">
+		select 
+			user_no          as no, 
+			user_name        as name,
+			user_email       as email,
+			user_password    as password,
+			user_birth       as birth, 
+			user_sex         as sex, 
+			user_available   as available, 
+			user_create_date as createDate, 
+			user_profile     as profile,
+			user_cover       as cover,
+			parent_no   as parentNo
+		from 
+			sns_users
+		where
+			user_email = #{value}
+		and
+			parent_no is null
+	</select>
+	
+	<select id="getUserByUserNo" parameterType="int" resultType="User">
+		select 
+			user_no          as no, 
+			user_name        as name,
+			user_email       as email,
+			user_password    as password,
+			user_birth       as birth, 
+			user_sex         as sex, 
+			user_available   as available, 
+			user_create_date as createDate,
+			user_profile     as profile,
+			user_cover       as cover,
+			USER_ADDRESS	 as address, 
+			USER_EDUCATION	 as education,
+			USER_TEL		 as tel
+		from 
+			sns_users
+		where
+			user_no = #{value}
+	</select>
+	
+	
+	<update id="updateUser" parameterType="User">
+		update sns_users 
+		set 
+			user_address   =   #{address}, 
+			user_education =   #{education},
+			user_profile   =   #{profile},
+			user_cover     =   #{cover}, 
+			user_tel       =   #{tel}, 
+			page_name      =   #{pageName}, 
+			page_category  =   #{category}
+		where 
+			user_no        =   #{no}
+	</update>
+	
+	<select id="getPageInfoByUserNo" parameterType="int" resultType="User">
+		select
+			A.user_no 		as no,
+			A.USER_PROFILE	as profile,
+			A.USER_COVER		as cover, 
+			A.PAGE_NAME		as pageName, 
+			A.PARENT_NO		as parentNo, 
+			A.PAGE_CATEGORY	as category,
+			nvl(B.pageLikeCount, 0) as pageLikeCount
+		from 
+			sns_users A, (select like_event_no ,count(*) as pageLikeCount
+								from likes
+							WHERE
+								like_event = 'page'
+								group by like_event_no
+							)B
+		where
+			A.user_no = B.like_event_no(+)
+		and
+			A.parent_no = #{value}
+		and
+			A.parent_no is not null
+	</select>
+	
+ 	<insert id = "addPage" parameterType="User">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select user_seq.nextval from dual 
+		</selectKey>
+			INSERT INTO SNS_USERS 
+				(USER_NO, USER_NAME, USER_EMAIL, USER_PASSWORD, USER_BIRTH, USER_SEX, USER_AVAILABLE, USER_CREATE_DATE, USER_ADDRESS, USER_EDUCATION, USER_PROFILE, USER_COVER, USER_TEL, PAGE_NAME, PARENT_NO, PAGE_CATEGORY)
+			VALUES  
+				(#{no}, #{name}, #{email}, #{password}, #{birth}, #{sex},'Y', sysdate, #{address}, #{education}, #{profile}, #{cover}, #{tel}, #{pageName}, #{parentNo}, #{category})
+	</insert>
+	 
+</mapper>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:property-placeholder location="classpath:/META-INF/spring/config.properties"/>
+	
+	<annotation-driven />
+	<resources mapping="/resources/**" location="/resources/" />
+	<default-servlet-handler/>
+
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<context:component-scan base-package="kr.co.fa">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+	</context:component-scan>
+	
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+		<beans:property name="maxUploadSize" value="20971520" />
+		<beans:property name="maxUploadSizePerFile" value="10485760" />
+	</beans:bean>
+	
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/**"/>
+			<exclude-mapping path="/"/>
+			<exclude-mapping path="/login"/>
+			<exclude-mapping path="/register"/>
+			<exclude-mapping path="/resources/**"/>
+			<exclude-mapping path="/admin"/>
+			<exclude-mapping path="/admin/**"/>
+			<exclude-mapping path="/adminLogin"/>
+			<beans:bean class="kr.co.fa.interceptor.UserInterceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/**"/>
+			<beans:bean class="kr.co.fa.interceptor.UserInfoInterceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/admin"/>
+			<mapping path="/admin/**"/>
+			<exclude-mapping path="/adminLogin"/>
+			<beans:bean class="kr.co.fa.interceptor.AdminInterceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/admin/adminList"/>
+			<exclude-mapping path="/adminLogin"/>
+			<beans:bean class="kr.co.fa.interceptor.AdminLevelInterceptor1" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/admin/adminConfig"/>
+			<exclude-mapping path="/adminLogin"/>
+			<beans:bean class="kr.co.fa.interceptor.AdminLevelInterceptor2" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/admin"/>
+			<mapping path="/admin/**"/>
+			<exclude-mapping path="/adminLogin"/>
+			<beans:bean class="kr.co.fa.interceptor.AdminExileInterceptor" />
+		</interceptor>
+	</interceptors>
+	
+</beans:beans>

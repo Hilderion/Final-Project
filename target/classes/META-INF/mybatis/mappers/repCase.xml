@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="kr.co.fa.dao.RepCaseDao">
+
+	<select id="getRepCaseByNo" parameterType="int" resultType="RepCase">
+		select
+			case_no			as no,
+			case_type		as type,
+			case_ihr_no		as ihrNo,
+			case_contents	as contents,
+			case_status		as status,
+			case_rcv_date	as rcvDate,
+			case_acu_no		as acuNo
+		from
+			rep_case
+		where
+			case_no = #{value}	
+	
+	</select>
+
+
+	<select id="getTotalRows" resultType="int" parameterType="kr.co.fa.vo.RepBoardCriteria">
+		select
+			count(*)
+		from
+			rep_case
+		<where>
+			<if test="opt != null">
+				case_type = #{opt}
+			</if>
+			<if test="status != null">
+				and case_status = #{status}
+			</if>
+			<if test="keyword != null">
+				<choose>
+					<when test="searchOpt == 'user'">
+						and case_ihr_no in (
+												select
+													user_no
+												from
+													sns_users
+												where
+													user_name like '%' || #{keyword} || '%'	
+											)
+					</when>
+					<when test="searchOpt == 'page'">
+						and case_ihr_no in (
+												select
+													user_no
+												from
+													sns_users
+												where
+													page_name like '%' || #{keyword} || '%'	
+											)
+					</when>
+					<when test="searchOpt == 'board'">
+						and case_ihr_no in (
+												select
+													board_no
+												from
+													board
+												where
+													board_contents like '%' || #{keyword} || '%'			
+											)
+					</when>
+					<when test="searchOpt == 'reply'">
+						and case_ihr_no in (
+												select
+													reply_no
+												from
+													reply
+												where
+													reply_contents like '%' || #{keyword} || '%' 		
+										
+											)
+					</when>
+				</choose>
+			</if>
+		</where>	
+		order by 
+			case_no	desc
+	</select>
+
+	<select id="getRepCases" resultType="RepCase" parameterType="kr.co.fa.vo.RepBoardCriteria">
+		select
+			case_no			as no,
+			case_type		as type,
+			case_ihr_no		as ihrNo,
+			case_contents	as contents,
+			case_status		as status,
+			case_rcv_date	as rcvDate,
+			case_acu_no		as acuNo
+		from
+			(
+				select
+					A.*,
+					row_number() over (order by case_no desc) rn
+				from
+					rep_case A
+				<where>
+					<if test="opt != null">
+						case_type = #{opt}
+					</if>
+					<if test="status != null">
+						and case_status = #{status}
+					</if>
+					<if test="keyword != null">
+						<choose>
+							<when test="searchOpt == 'user'">
+								and case_ihr_no in (
+														select
+															user_no
+														from
+															sns_users
+														where
+															user_name like '%' || #{keyword} || '%'	
+													)
+							</when>
+							<when test="searchOpt == 'page'">
+								and case_ihr_no in (
+														select
+															user_no
+														from
+															sns_users
+														where
+															page_name like '%' || #{keyword} || '%'	
+													)
+							</when>
+							<when test="searchOpt == 'board'">
+								and case_ihr_no in (
+														select
+															board_no
+														from
+															board
+														where
+															board_contents like '%' || #{keyword} || '%'			
+													)
+							</when>
+							<when test="searchOpt == 'reply'">
+								and case_ihr_no in (
+														select
+															reply_no
+														from
+															reply
+														where
+															reply_contents like '%' || #{keyword} || '%' 		
+												
+													)
+							</when>
+						</choose>
+					</if>
+				</where>		
+			)
+		where
+			rn >= #{beginIndex} and rn &lt;= #{endIndex}
+					
+		order by 
+			case_no	desc
+	</select>
+	
+	<insert id="addRepCase" parameterType="RepCase">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select rep_case_seq.nextval from dual
+		</selectKey>
+		insert into
+			rep_case
+		(case_no, case_type, case_ihr_no, case_contents, case_status, case_rcv_date, case_acu_no)	
+		values
+		(#{no}, #{type}, #{ihrNo}, #{contents}, #{status}, sysdate, #{acuNo})	
+		
+	</insert>
+	
+	<select id="getUserByNo" parameterType="int" resultType="User">
+		select 
+			user_no          as no, 
+			user_name        as name,
+			user_email       as email,
+			user_password    as password,
+			user_birth       as birth, 
+			user_sex         as sex, 
+			user_available   as available, 
+			user_create_date as createDate,
+			user_profile     as profile
+		from 
+			sns_users
+		where
+			user_no = #{value}	
+	</select>
+
+	<select id="getBoardbyNo" parameterType="int" resultType="Board">
+		select 
+			A.board_no				as no,
+			A.user_no				as "user.no",
+			A.board_contents		as contents,
+			A.board_create_date		as createDate,
+			A.board_media_check		as mediaCheck,
+			A.board_open_range		as openRange,
+			A.board_available		as available,
+			A.board_like			as "like",
+			A.SHARE_NO				as "share.no",
+			B.USER_NO				as "share.user.no", 
+			B.BOARD_CONTENTS		as "share.contents", 
+			B.BOARD_CREATE_DATE		as "share.createDate", 
+			B.BOARD_MEDIA_CHECK		as "share.mediaCheck", 
+			B.BOARD_OPEN_RANGE		as "share.openRange", 
+			B.BOARD_AVAILABLE		as "share.available", 	
+			B.BOARD_LIKE			as "share.like",
+			C.user_profile			as "user.profile",
+			C.user_name				as "user.name"
+		from
+			board A, board B, sns_users C
+		where
+			A.share_no = B.board_no(+)
+		and
+			A.user_no = C.user_no
+		and
+			A.board_no = #{value}
+		
+		order by A.board_create_date desc
+	</select>
+	
+	<select id="getReplyByNo" parameterType="int" resultType="Reply">
+		select
+			reply_no			as no,
+			board_no			as "board.no",
+			reply_contents		as contents,
+			reply_date			as "date",
+			user_no				as "user.no",
+			reply_parent_no		as parentNo,
+			reply_child_check	as childCheck,
+			reply_sequence		as "sequence",
+			reply_available		as available
+		from
+			reply
+		where
+			reply_no = #{value}		
+		
+	</select>
+	
+	<update id="updateUserStatus" parameterType="RepCase">
+		update
+			sns_users
+		set
+			user_available = #{status}
+		where
+			user_no = #{ihrNo}		
+	
+	</update>
+	
+	<update id="updateBoardStatus" parameterType="RepCase">
+		update
+			board
+		set
+			board_available = #{status}
+		where
+			board_no = #{ihrNo}		
+	
+	</update>
+	
+	<update id="updateReplyStatus" parameterType="RepCase">
+		update
+			reply
+		set
+			reply_available = #{status}
+		where
+			reply_no = #{ihrNo}		
+	
+	</update>
+	
+	<update id="updateRepCase" parameterType="RepCase">
+		update
+			rep_case
+		set
+			case_status = #{status}	
+		where
+			case_no = #{no}
+	</update>
+	
+	<update id="updateRepCase2" parameterType="RepCase">
+		update
+			rep_case
+		set
+			case_status = #{status}	
+		where
+			case_ihr_no = #{ihrNo}	
+	</update>
+	
+	<select id="getRepCaseCount" resultType="int">
+	select
+		count(*)
+		from (
+				select
+					*
+				from
+					rep_case
+				where
+					case_rcv_date like sysdate	
+			)		
+	</select>
+	
+	<select id="getPrevCase" resultType="RepCase" parameterType="RepCase">
+		select
+			case_no			as no,
+			case_type		as type,
+			case_ihr_no		as ihrNo,
+			case_contents	as contents,
+			case_status		as status,
+			case_rcv_date	as rcvDate,
+			case_acu_no		as acuNo
+		from
+			rep_case
+		where
+			case_ihr_no = #{ihrNo}
+		and 		
+			case_acu_no = #{acuNo}
+		and
+			case_rcv_date like sysdate		
+	</select>
+	
+	<select id="getRepCasesByIhrNo" parameterType="int" resultType="RepCase">
+		select
+			case_no			as no,
+			case_type		as type,
+			case_ihr_no		as ihrNo,
+			case_contents	as contents,
+			case_status		as status,
+			case_rcv_date	as rcvDate,
+			case_acu_no		as acuNo,
+			case_acu_no		as "indvUser.no"
+		from
+			rep_case
+		where
+			case_ihr_no = #{value}
+	</select>
+
+	
+</mapper>

@@ -1,0 +1,46 @@
+
+.friend-request {
+    margin-top:60px;
+    margin-bottom: 20px;
+    background-color: white;
+}
+.find-friend {
+    background-color: white;
+}
+.friend-request .friend-info img,
+.find-friend .friend-info img {
+  margin-left: 10px;
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+}
+
+.friend-request .event-friend img,
+.find-friend .event-friend img {
+  width: 20px;
+  height: 20px; 
+}
+.request {
+  line-height: 80px;
+  vertical-align: middle;
+  text-align: center;
+}
+.request a {
+    font-size: 12px;
+}
+.friend-request .friend-event,
+.find-friend .friend-event {
+    padding-top: 10px;
+    padding-left: 10px;
+    text-align: left;
+    margin-bottom: 0px;
+}
+.friend-name,
+.friend-addr {
+    padding-left: 10px;
+    margin-bottom: 0px;
+}
+.friend-request #request-change {
+    padding-left: 10px;
+    font-size: 6px;
+}

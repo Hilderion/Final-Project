@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+<configuration>
+	
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		<setting name="callSettersOnNulls" value="true"/>
+	</settings>
+	
+	<typeAliases>
+		<typeAlias alias="RepAd" type="kr.co.fa.vo.RepAd"/>
+		<typeAlias alias="RepAdmin" type="kr.co.fa.vo.RepAdmin"/>
+		<typeAlias alias="RepBoard" type="kr.co.fa.vo.RepBoard"/>
+		<typeAlias alias="RepCase" type="kr.co.fa.vo.RepCase"/>
+		<typeAlias alias="RepPhoto" type="kr.co.fa.vo.RepPhoto"/>
+		<typeAlias alias="RepUser" type="kr.co.fa.vo.RepUser"/>
+		<typeAlias alias="RepBoardCriteria" type="kr.co.fa.vo.RepBoardCriteria"/>
+		<typeAlias alias="RepBoardPagination" type="kr.co.fa.vo.RepBoardPagination"/>
+		<typeAlias alias="User" type="kr.co.fa.vo.User"/>
+		<typeAlias alias="Board" type="kr.co.fa.vo.Board"/>
+		<typeAlias alias="Criteria" type="kr.co.fa.vo.Criteria"/>
+		<typeAlias alias="RepSub" type="kr.co.fa.vo.RepSub"/>
+		<typeAlias alias="BoardMedia" type="kr.co.fa.vo.BoardMedia"/>
+		<typeAlias alias="Friend" type="kr.co.fa.vo.Friend" />
+		<typeAlias alias="Allim"  type="kr.co.fa.vo.Allim" />
+		<typeAlias alias="Follow" type="kr.co.fa.vo.Follow" />
+		<typeAlias alias="FriendEvent" type="kr.co.fa.vo.FriendEvent"/>
+		<typeAlias alias="Reply" type="kr.co.fa.vo.Reply" />
+		<typeAlias alias="Like" type="kr.co.fa.vo.Like" />
+		<typeAlias alias="Tag" type="kr.co.fa.vo.Tag"/>
+		<typeAlias alias="Message" type="kr.co.fa.vo.Message" />
+
+
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="META-INF/mybatis/mappers/repAd.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/repBoard.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/repCase.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/repUser.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/admin.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/users.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/board.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/allim.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/friend.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/message.xml"/>
+		<mapper resource="META-INF/mybatis/mappers/tag.xml"/>
+	</mappers>
+	
+</configuration>

@@ -1,0 +1,70 @@
+.white {
+    background-color: white;
+}
+.border {
+    border: 1px solid gray;
+}
+.marginLR0 {
+	margin-left: 0px;
+	margin-right: 0px;
+}
+.margin20 {
+    margin-top: 20px;
+}
+.margin60 {
+	margin-top: 60px;
+}
+.lg-1, .lg-2, .lg-3, .lg-4, .lg-5, .lg-6,
+.lg-7, .lg-8, .lg-9, .lg-10, .lg-11, .lg-12{
+    padding: 0px;
+}
+.margin10 {
+    margin-bottom: 10px;
+}
+hr {
+    margin-top: 0px;
+    border-top: 1px solid #bfb7b7;
+}
+.reset-button {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    overflow: visible;
+    background: transparent;
+}
+.allim {
+    height:50px;
+    padding-top: 13px;
+    padding-left: 10px;
+    font-size: 18px;
+    font-weight: bolder;
+}
+
+.allim-info {
+    border-bottom: 1px solid #bfb7b7;
+}
+.allim-info:last-child {
+    border-bottom: 0px;
+} 
+.allim-info img {
+    width: 50px;
+    height: 50px;
+    margin: 10px 0px 10px 10px;
+    
+}
+.allim-info a {
+    color: black;
+    font-weight: bolder;
+    font-size: 14px;
+    text-decoration: none;
+}
+.allim-info-event {
+    margin-top: 10px;
+}
+.allim-info button {
+    position: absolute;
+    right: 20px;
+    text-align: right;
+    margin-top: 35px;
+}

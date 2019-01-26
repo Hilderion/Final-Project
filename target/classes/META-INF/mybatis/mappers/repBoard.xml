@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="kr.co.fa.dao.RepBoardDao">
+	
+	<insert id="addBoard" parameterType="RepBoard">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select rep_board_seq.nextval from dual
+		</selectKey>
+		insert into rep_board
+		(rep_no, rep_type, user_no, rep_title, rep_content, rep_date)
+		values
+		<!-- user_no는 임시로 들어가있음 !! -->
+		(#{no}, #{type}, 35, #{title}, #{content}, sysdate)
+	
+	</insert>
+	
+	<insert id="addBoard2" parameterType="RepBoard">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select rep_board_seq.nextval from dual
+		</selectKey>
+		insert into rep_board
+		(rep_no, rep_type, user_no, rep_title, rep_content, rep_date)
+		values
+		(#{no}, #{type}, #{user.no}, #{title}, #{content}, sysdate)
+	
+	</insert>
+	
+	<insert id="addSub" parameterType="RepSub">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select rep_sub_seq.nextval from dual
+		</selectKey>
+		insert into rep_sub
+		(sub_no, rep_no, user_no, reply_content, reply_date, rep_sub_show)
+		values
+		<!-- user_no는 임시 투입 -->
+		(#{no},#{repBoard.no}, #{user.no}, #{content}, sysdate, 'Y')
+		
+	</insert>
+	
+	<update id="repSubDel" parameterType="int">
+		update 
+			rep_sub
+		set
+			rep_sub_show = 'N'
+		where
+			sub_no = #{value}	
+	
+	</update>
+	
+	<select id="getTotalRows" parameterType="kr.co.fa.vo.RepBoardCriteria" resultType="int">
+		select
+			count(*)
+		from
+			rep_board	
+		<where>
+			<if test="opt != null">
+				rep_type = #{opt}
+			</if>		
+			<if test="keyword != null">
+				<choose>
+					<when test="searchOpt == 'title'">
+						and rep_title like '%' || #{keyword} || '%'
+					</when>
+					<when  test="searchOpt == 'writer'">
+						and user_no in (
+											select
+												user_no
+											from
+												sns_users
+											where
+												user_name like '%' || #{keyword} || '%'		
+										)
+					</when>
+				</choose>
+			</if>
+		</where>	
+	
+	</select>
+	
+	<select id="getBoards" parameterType="kr.co.fa.vo.RepBoardCriteria" resultType="RepBoard">
+		select 
+			rep_no		as no,
+			rep_type	as type,
+			user_no		as "user.no",
+			rep_title	as title,
+			rep_content	as content,
+			rep_date	as createDate
+		from (
+				select 
+					A.*,
+					row_number() over (order by rep_no desc) rn
+				from
+					rep_board A
+				<where>
+					<if test="opt != null">
+						and rep_type = #{opt}
+					</if>
+					<if test="keyword != null">
+						<choose>
+							<when test="searchOpt == 'title'">
+								and rep_title like '%' || #{keyword} || '%'
+							</when>
+							<when  test="searchOpt == 'writer'">
+								and user_no in (
+													select
+														user_no
+													from
+														sns_users
+													where
+														user_name like '%' || #{keyword} || '%'		
+												)
+							</when>
+						</choose>
+					</if>
+				
+				</where>
+			  )
+		where
+			rn >= #{beginIndex} and rn &lt;= #{endIndex}	
+			
+		order by
+			rep_no desc	
+			
+	</select>
+	
+	<select id="getSubs" parameterType="int" resultType="RepSub">
+		select
+			sub_no			as no,
+			rep_no			as "repBoard.no",
+			user_no			as "user.no",
+			reply_content	as content,
+			reply_date		as createDate,
+			rep_sub_show	as repSubShow
+		from
+			rep_sub
+		where
+			rep_no = #{value}		
+		
+	</select>
+	
+	<select id="getUserByNo" parameterType="int" resultType="User">
+		select 
+			user_no          as no, 
+			user_name        as name,
+			user_email       as email,
+			user_password    as password,
+			user_birth       as birth, 
+			user_sex         as sex, 
+			user_available   as available, 
+			user_create_date as createDate 
+		from 
+			sns_users
+		where
+			user_no = #{value}	
+	</select>
+	
+	<select id="getBoardByNo" parameterType="int" resultType="RepBoard">
+		select 
+			rep_no		as no,
+			rep_type	as type,
+			user_no		as "user.no",
+			rep_title	as title,
+			rep_content	as content,
+			rep_date	as createDate
+		from
+			rep_board
+		where
+			rep_no = #{value}		
+	</select>
+	
+	<select id="getBoardByUserNo" parameterType="int" resultType="RepBoard">
+		select 
+			rep_no		as no,
+			rep_type	as type,
+			user_no		as "user.no",
+			rep_title	as title,
+			rep_content	as content,
+			rep_date	as createDate
+		from
+			rep_board
+		where
+			user_no = #{value}	
+		order by
+			rep_no desc		
+	</select>
+	
+	<select id="getBoardNowNo" resultType="int">
+		select 
+			rep_board_SEQ.currval from dual
+	</select>
+	
+	<insert id="addFile" parameterType="RepPhoto">
+		insert into rep_photo
+		(rep_no, rep_image)
+		values
+		<!-- 이 부분 for문 어떻게..? List에서 꺼내와야함 -->
+		(#{no}, #{image})
+	</insert>
+	
+	<select id="getFiles" parameterType="int" resultType="RepPhoto">
+	
+		select 
+			rep_no		as no,
+			rep_image	as image
+		from
+			rep_photo
+		where
+			rep_no = #{value}	
+
+	</select>
+
+	
+	
+</mapper>

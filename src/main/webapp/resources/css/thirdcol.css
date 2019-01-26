@@ -1,0 +1,154 @@
+.hr {
+	margin-top:10px;
+	margin-bottom:10px;
+}
+.thirdcol-content {
+  margin-top: 60px; 
+  display: block;
+  background: #dddfe2;
+  overflow-x: auto;
+}
+.thirdcol-content > div > a,
+.thirdcol-content > div > p {
+  font-size: 12px;
+}
+.thirdcol-content .section-content {
+  border-radius: 2px;
+  border: 1px solid #dddfe2;
+  margin: 0 0 15px 0;
+  overflow-y: hidden;
+  background: #f6f7f9;
+}
+.thirdcol-content .section-content h4:nth-child(1) {
+  font-size: 14px;
+  margin: 6px;
+  padding: 6px;
+  color: #888;
+}
+.thirdcol-content .section-content h4:nth-child(1) a {
+  float: right;
+  color: #8a8a8a;
+}
+.thirdcol-content .section-content p a {
+  display: block;
+}
+.thirdcol-content .section-content p a span:not(:first-child) {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 9px;
+  padding: 1px 2px;
+  color: #545454;
+  background: #fff;
+  border: 1px solid #b8b8b8;
+}
+.thirdcol-content .section-content a {
+  font-size: 14px;
+  margin-right: 5px;
+}
+.thirdcol-content .section-content a img {
+  width: 65px;
+  height: 65px;
+}
+.thirdcol-content .section-content a .fa {
+  display: inline-block;
+  margin: 5px;
+}
+.thirdcol-content .section-content p:nth-child(3) {
+  text-align: right;
+  margin: -20px 0 4px 0;
+  padding: 2px;
+  width: 80%;
+}
+.thirdcol-content .section-content p:nth-child(3) a {
+  display: inline-block;
+  position: relative;
+  top: -18px;
+}
+.thirdcol-content .section-content p:nth-child(4) {
+  margin-top: -64px;
+  margin-left: 90px;
+  font-size: 12px;
+}
+.thirdcol-content .section-content p:nth-child(4) a:not(:nth-child(1)) {
+  font-size: 12px;
+  color: #4b4f56;
+  margin-right: 5px;
+}
+.thirdcol-content .section-content p:nth-child(7) {
+  text-align: center;
+}
+.thirdcol-content .section-content p:nth-child(7) a {
+  width: 20%;
+  display: inline-block;
+  color: #333;
+}
+.thirdcol-content .section-content p:nth-child(7) .fa {
+  display: block;
+}
+.thirdcol-content .section-content .activetrend,
+.thirdcol-content .section-content .activetrend .fa {
+  color: #1273b8;
+}
+.thirdcol-content .section-content .trend-feed ul {
+  margin: 0 30px;
+  padding: 0;
+  list-style: square url("http://i.imgur.com/Etzny0O.png");
+}
+.thirdcol-content .section-content .trend-feed ul li {
+  font-size: 12px;
+}
+.thirdcol-content .section-content .trend-feed ul li span:nth-child(1) {
+  color: #999;
+}
+.thirdcol-content .section-content .trend-feed div a {
+  float: left;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.thirdcol-content .section-content .trend-feed div a:first-child {
+  padding: 4px 0 0 4px;
+}
+.thirdcol-content .section-content .trend-feed div a:last-child {
+  float: right;
+  padding: 4px 0 0 4px;
+}
+.thirdcol-content .section-content:nth-child(1) > a:nth-child(2) {
+  float: right;
+  color: #8a8a8a;
+}
+.thirdcol-content .section-content:nth-child(4) {
+  font-size: 12px;
+}
+.thirdcol-content .section-content:nth-child(4) h4 {
+  float: left;
+}
+.thirdcol-content .section-content:nth-child(4) a:nth-child(2) {
+  margin-top: 10px;
+  float: right;
+}
+.thirdcol-content .section-content:nth-child(4) div {
+  padding: 5px;
+}
+.thirdcol-content .section-content:nth-child(4) div a {
+  display: block;
+}
+.thirdcol-content .section-content:nth-child(4) div a img {
+  width: 100%;
+  height: auto;
+}
+.thirdcol-content .section-content:nth-child(4) div a:hover {
+  text-decoration: none;
+}
+.thirdcol-content .section-content:nth-child(4) div div {
+  padding: 5px 5px 0 5px;
+  font-size: 12px;
+}
+.thirdcol-content .section-content:nth-child(4) div div div {
+  padding: 0;
+}
+.thirdcol-content .section-content:nth-child(4) div div:nth-child(3) {
+  color: #878787;
+}
+.thirdcol-content .section-content:nth-child(5) a {
+  font-size: 12px;
+}

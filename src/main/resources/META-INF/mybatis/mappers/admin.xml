@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="kr.co.fa.dao.AdminDao">
+	
+	<insert id="addAdmin" parameterType="RepAdmin">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select admin_seq.nextval from dual
+		</selectKey>
+		insert into rep_admin
+		(admin_no, admin_level, admin_id, admin_name, admin_pwd, admin_create_date)
+		values
+		(#{no},#{secLevel},#{id},#{name},#{pwd},sysdate )
+		
+	</insert>
+	
+	<select id="getAdminById" parameterType="String" resultType="RepAdmin">
+		select 
+			admin_no			as no,
+			admin_level			as secLevel,
+			admin_id			as id,
+			admin_name			as name,
+			admin_pwd			as pwd,
+			admin_create_date	as createDate
+		from
+			rep_admin
+		where
+			admin_id = #{value}		
+	</select>
+	
+	<select id="getAdminByNo" parameterType="int" resultType="RepAdmin">
+		select 
+			admin_no			as no,
+			admin_level			as secLevel,
+			admin_id			as id,
+			admin_name			as name,
+			admin_pwd			as pwd,
+			admin_create_date	as createDate
+		from
+			rep_admin
+		where
+			admin_no = #{value}
+	</select>
+	
+	<select id="getUserCount" resultType="int">
+	select
+		count(*)
+		from (
+				select
+					*
+				from
+					sns_users
+				where
+					user_create_date like sysdate	
+			)		
+	</select>
+	
+	<select id="getAdminList" resultType="RepAdmin" parameterType="RepBoardCriteria">
+		select 
+			admin_no			as no,
+			admin_level			as secLevel,
+			admin_id			as id,
+			admin_name			as name,
+			admin_pwd			as pwd,
+			admin_create_date	as createDate
+		from
+			rep_admin
+		<where>
+			<if test="opt != null">
+				<choose>
+					<when test="opt == 'level0'">
+						admin_level = 0
+					</when>
+					<when test="opt == 'level1'">
+						admin_level = 1
+					</when>
+					<when test="opt == 'level2'">
+						admin_level = 2
+					</when>
+					<when test="opt == 'level3'">
+						admin_level = 3
+					</when>
+				</choose>
+			</if>
+		</where>	
+			
+		order by
+			admin_no desc	
+			
+			
+			
+			
+	</select>
+	
+	<update id="updateAdmin" parameterType="RepAdmin">
+		update
+			rep_admin
+		set
+			admin_level = #{secLevel}
+		where
+			admin_no = #{no}		
+	</update>
+
+	
+</mapper>

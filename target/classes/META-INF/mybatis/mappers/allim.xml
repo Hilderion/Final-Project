@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="kr.co.fa.dao.AllimDao">
+	<select id="myAllimCount" parameterType="int" resultType="int">
+		select 
+			count(allim_no)
+		from 
+			allim 
+		where 
+			FRIEND_NO = #{value}
+		AND
+			ALLIM_CHECK = 'N'
+	</select>
+	<select id="myAllimView" parameterType="int" resultType="Allim">
+		select 
+			A.allim_no      as   no,
+			SS.user_name    as   "subUser.name",
+			SS.user_no      as   "subUser.no",
+			S.user_name     as 	 "user.name",
+			S.user_no     	as   "user.no",
+			S.user_profile  as   "user.profile",	
+			A.allim_check   as   "check",
+			A.allim_event   as   event,
+			A.allim_date    as   "date",
+			A.allim_event_no as  eventNo
+		from 
+			sns_users SS, sns_users S, allim A
+		where
+			A.user_no = S.user_no
+		and 
+			A.sub_user_no = SS.user_no(+) 
+		and 
+			A.friend_no = #{value}
+		order by 
+			A.allim_date desc
+	</select>
+	
+	<insert id="createAllim" parameterType="Allim">
+		insert into allim (allim_no, user_no, allim_event, allim_date, allim_check, sub_user_no, friend_no, allim_event_no)
+			select
+				allim_seq.nextval,    
+				${user.no} , 
+				<choose>
+					<when test="event == '게시글작성'">
+						#{event}, 
+						sysdate, 
+						'N' , 
+						null,
+						B.friend_no,
+						#{eventNo}
+					</when>
+					<when test="event != '게시글작성'">
+						#{event}, 
+						sysdate, 
+						'N' , 
+						${subUser.no},
+						B.friend_no,
+						#{eventNo}
+					</when>
+				</choose>
+			from 
+				dual , friend B
+			where
+			 	B.user_no = #{user.no}
+			and 
+				B.ano_check = 'Y'		
+	</insert>
+	
+	<insert id="agreeFriendRequest" parameterType="Allim">
+		insert into allim 
+			(allim_no, user_no, allim_event, sub_user_no, friend_no, allim_event_no )
+		values 
+			(allim_seq.nextval, #{user.no}, #{event}, #{subUser.no}, #{subUser.no}, #{eventNo})
+	</insert>
+	
+	<insert id="addAllim" parameterType="Allim">
+		insert into allim 
+			(allim_no, user_no, allim_event, sub_user_no, friend_no, allim_event_no )
+		values 
+			(allim_seq.nextval, #{user.no}, #{event}, #{subUser.no}, #{subUser.no}, #{eventNo})
+	</insert>
+	
+	<insert id="addAllim2" parameterType="Allim">
+		insert into allim 
+			(allim_no, user_no, allim_event, sub_user_no, friend_no, allim_event_no )
+		values 
+			(allim_seq.nextval, #{user.no}, #{event}, #{subUser.no}, #{friend.no}, #{eventNo})
+	</insert>
+	
+	<delete id="delFriendRequest" parameterType="Allim">
+		delete from allim 
+		where
+			user_no = #{user.no}
+		and 
+			sub_user_no = #{subUser.no}
+		and
+			allim_event = '친구요청'
+	</delete>
+	
+	<delete id="delclickBoardLike" parameterType="Allim">
+		delete from allim 
+		where
+			user_no = #{user.no}
+		and 
+			sub_user_no = #{subUser.no}
+		and
+			allim_event = '게시글좋아요'
+	</delete>
+	
+	<select id="getFriendnameByNo" parameterType="int" resultType="User">
+		select 
+			FU.user_no   as 	"user.no"
+		from 
+			sns_users S, friend F, sns_users FU 
+		where
+			S.user_no = F.user_no 
+		and
+			F.friend_no = FU.user_no 
+		and 
+			S.user_no = #{value}
+	</select>
+	
+	<select id="getBoardNoByUserNo" parameterType="int" resultType="Board">
+		select 
+			board_no
+		from 
+			board 
+		where
+			user_no = #{value}
+	</select>
+	
+	<select id="getSubUserByUserNo" parameterType="Board" resultType="Board">
+		select 
+			board_no   as   no, 
+			user_no    as   "user.no"
+		from 
+			board
+		where 	
+			user_no= #{user.no}
+		and 
+			share_no = #{no}
+	</select>
+	
+	<select id="getBoardNumber" parameterType="Board" resultType="Board">
+		select 
+			SU.user_no   as	  "user.no",
+			B.board_no	 as	   no
+		from 
+			sns_users S, board B, board SB , sns_users SU
+		where 
+			B.board_no = SB.share_no 
+		and 
+			S.user_no = SB.user_no 
+		and 
+			SU.user_no = B.user_no 
+		and 
+			S.user_no = #{user.no}
+		and 
+			SB.board_no = #{no}
+	</select>
+	
+	<select id="getUserNoByBoardNo" parameterType="int" resultType="int">
+		select 
+			user_no
+		from
+			board  
+		where 
+			board_no = #{value}
+	</select>
+	
+	<select id="getAllimByAllimNo" parameterType="int" resultType="Allim">
+		select 
+			allim_no    	as    no, 
+			user_no     	as    "user.no",
+			allim_event 	as    event, 
+			allim_date  	as    "date", 
+			allim_check 	as    "check", 
+			sub_user_no 	as    "subUser.no",
+			friend_no   	as    "friend.no",
+			allim_event_no  as    eventNo
+		from 
+			allim 
+		where 	
+			allim_no = #{value}
+	</select>
+	
+	<select id="getReplyParentNo" parameterType="int" resultType="int">
+		select 
+			R.user_no   as   "user.no"
+		from 
+			board B, Reply R
+		where
+			B.board_no = R.board_no 
+		and 
+   			R.reply_child_check = 0
+		and
+			B.board_no = #{value}
+	</select>
+	
+	<select id="getTagUserByboardNo" parameterType="int" resultType="Tag">
+		select 
+			T.user_no    as   "user.no"
+		from 	
+			board_media M, tag T 
+		where 
+			M.board_no = T.board_no 
+		and
+			T.board_no = #{value}	
+			
+	</select>
+	
+	<update id="updateAllim" parameterType="Allim">
+		update
+			allim 
+		set 
+			allim_check  =  #{check}
+		where 
+			allim_no = #{no}
+	</update>
+		
+	<select id="friendPkNo" resultType="int">
+		select 
+			fri_event_seq.currval 
+		from dual
+	</select>
+	
+	<select id="boardPkNo" resultType="int">
+		select 
+			board_seq.currval 
+		from dual
+	</select>
+	
+</mapper>

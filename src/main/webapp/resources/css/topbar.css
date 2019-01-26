@@ -1,0 +1,177 @@
+body {
+    background-color: #dddfe2;
+}
+.link {
+    text-decoration:none;
+}
+.absolute {
+    position: absolute;
+}
+.relative {
+    position: relative;
+}
+.text-row {
+	margin: 0px;
+}
+.marginLR0 {
+	margin-left: 0px;
+	margin-right: 0px;
+}
+.margin20 {
+    margin-top: 20px;
+}
+.margin60 {
+	margin-top: 60px;
+}
+.lg-1, .lg-2, .lg-3, .lg-4, .lg-5, .lg-6,
+.lg-7, .lg-8, .lg-9, .lg-10, .lg-11, .lg-12{
+    padding: 0px;
+}
+.margin10 {
+    margin-bottom: 10px;
+}
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.allim-hr{
+	margin-top:0px;
+	margin-bottom:0px;
+}
+#searchFriendAndPageAndBoardButton {
+	z-index:1000;
+	left:460px;
+	border: none;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    overflow: visible;
+    background: transparent;
+}
+
+.link-group a img {
+	display : inline-block;
+	width : 24px;
+	height : 24px;
+	margin-right : 9px;
+	border-radius : 50%;
+}
+textarea {
+	resize : none;
+	border : 0px;
+	height : 64px;
+}
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100 ;
+  padding: 6px 26px;
+  background: #3b5e95;
+  border-bottom: 1px solid #294c7b;
+}
+.topbar > .col-xs-offset-1 {
+	margin-left: 5%;
+}
+.topbar .right-group {
+  float: right;
+}
+.topbar .right-group .link-group {
+  position: relative;
+  display: inline-block;
+  padding: 0;
+}
+.topbar .right-group .link-group .link-a {
+  padding: 9px 8px;
+  color: #fff;
+  font-size: 12px;
+}
+.topbar .right-group .link-group .link-a img {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 9px;
+}
+.topbar .right-group .link-group .link-a:hover {
+  background: #355486;
+  text-decoration: none;
+}
+.topbar .right-group .link-group:nth-child(2) .link-a {
+  border-left: 1px solid #355485;
+}
+.topbar .right-group .notification-group {
+  border-left: 1px solid #355485;
+  display: inline-block;
+  position: relative;
+  top: 3px;
+}
+.topbar .right-group .notification-group .link-group .link-a {
+  margin: 0;
+  border: 0;
+}
+.topbar .right-group .notification-group .link-a {
+  color: #17253c;
+  font-size: 21px;
+}
+.topbar .right-group .notification-group .link-a:hover {
+  color: #111;
+  background: transparent;
+}
+.topbar .search-box {
+  display: inline-block;
+}
+.topbar .search-box .input-group{
+    width:350px;
+}
+.topbar .search-box .input-group * {
+      
+  font-size: 14px;
+  height: 28px;  
+}
+.topbar .search-box .input-group i {
+  top: 7px;
+  color: #7a7a7a;
+  right: 5px;
+  z-index:3;
+}
+.topbar .search-box .input-group i:hover {
+  color: #000;
+}
+#img-board {
+	opacity: 0; 
+}
+#img-board-label {
+	bottom: 23px; 
+	border: 2px solid; 
+	background-color: #87CEFA; 
+	cursor: pointer;
+}
+.board-label {
+	display:inline-block;
+	padding: .4em .75em; 
+	font-size: inherit; 
+	line-height: normal; 
+	vertical-align: middle; 
+	background-color: #fdfdfd; 
+	cursor: pointer; 
+	border: 1px solid #ebebeb; 
+	border-bottom-color: #e2e2e2; 
+	border-radius: .25em;
+}
+#friendRequestArea,
+#allimRequestArea {
+	position: absolute;
+    top: 35px;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    font-size: 14px;
+    text-align: left;
+    background-color: #fff;
+    border-radius: 4px;
+}

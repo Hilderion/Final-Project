@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="kr.co.fa.dao.RepAdDao">
+	
+	<insert id="repAdAdd" parameterType="RepAd">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select rep_ad_seq.nextval from dual
+		</selectKey>
+	
+		insert into rep_ad
+		(ad_no, user_no, ad_start_date, ad_end_date, ad_show, ad_permit, ad_rcv_date, ad_photo, ad_reject)
+		values
+		(#{no}, #{userNo}, #{startDate}, #{startDate} + 7, 'N', 'T', sysdate, #{photo}, ' ')
+	
+	</insert>
+	
+	<select id="getAllAd" resultType="RepAd">
+		select
+			ad_no				as "no",
+			user_no				as "userNo",
+			ad_start_date		as "startDate",
+			ad_end_date			as "endDate",
+			ad_permit			as "permit",
+			ad_show				as "show",
+			ad_rcv_date			as "rcvDate",
+			ad_photo			as "photo",
+			ad_reject			as "adReject"
+		from
+			rep_ad
+		order by
+			ad_no desc	
+	</select>
+	
+	<select id="getAdByUserNo" parameterType="int" resultType="RepAd">
+		select
+			ad_no				as "no",
+			user_no				as "userNo",
+			ad_start_date		as "startDate",
+			ad_end_date			as "endDate",
+			ad_permit			as "permit",
+			ad_show				as "show",
+			ad_rcv_date			as "rcvDate",
+			ad_photo			as "photo",
+			ad_reject			as "adReject"
+		from
+			rep_ad
+		where
+			user_no = #{value}		
+	</select>
+	
+	<select id="getUserByNo" parameterType="int" resultType="User">
+		select 
+			user_no          as no, 
+			user_name        as name,
+			user_email       as email,
+			user_password    as password,
+			user_birth       as birth, 
+			user_sex         as sex, 
+			user_available   as available, 
+			user_create_date as createDate 
+		from 
+			sns_users
+		where
+			user_no = #{value}	
+	</select>
+	
+	<select id="getAllAdAccepted" resultType="RepAd">
+		select 
+			ad_no				as "no",
+			user_no				as "userNo",
+			ad_start_date		as "startDate",
+			ad_end_date			as "endDate",
+			ad_permit			as "permit",
+			ad_show				as "show",
+			ad_rcv_date			as "rcvDate",
+			ad_photo			as "photo",
+			ad_reject			as "adReject"
+		from
+			rep_ad
+		where
+			ad_end_date &gt;= sysdate -1
+		and
+			ad_show = 'Y'			
+			
+	</select>
+	
+	<update id="adAcceptByNo" parameterType="int">
+		update
+			rep_ad
+		set
+			ad_show = 'N',
+			ad_permit = 'Y'
+		where
+			ad_no = #{value}	
+	
+	</update>
+
+	<update id="adStartByNo" parameterType="int">
+		update
+			rep_ad
+		set
+			ad_show = 'Y',
+			ad_permit = 'Y',
+			ad_reject = ' '
+		where
+			ad_no = #{value}	
+	
+	</update>
+	
+	<update id="adCancelByNo" parameterType="int">
+		update
+			rep_ad
+		set
+			ad_show = 'N',
+			ad_permit = 'Y',
+			ad_reject = '일시중단'
+		where
+			ad_no = #{value}
+	</update>
+	
+	<update id="adRejectByNo" parameterType="int">
+		update
+			rep_ad
+		set
+			ad_permit = 'N',
+			ad_show = 'N',
+			ad_reject = '광고거부'
+		where
+			ad_no = #{no}
+	</update>
+	
+	<select id="getRepAdCount" resultType="int">
+	select
+		count(*)
+		from (
+				select
+					*
+				from
+					rep_ad
+				where
+					ad_rcv_date like sysdate
+				and
+					ad_permit ='T'
+			)		
+	</select>
+	
+</mapper>

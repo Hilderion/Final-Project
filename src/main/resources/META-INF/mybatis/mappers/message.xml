@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="kr.co.fa.dao.MessageDao">
+
+	<resultMap type="Message" id="getMessageResultMap">
+		<id column="message_no" property="no" />
+		<result column="message_contents" property="contents"/>
+		<result column="message_create_date" property="createDate"/>
+		<association property="sendUser" column="senduser_no" javaType="User" select="kr.co.fa.dao.UserDao.getUserByUserNo"/>
+		<association property="receiveUser" column="receiveuser_no" javaType="User" select="kr.co.fa.dao.UserDao.getUserByUserNo"/>
+	</resultMap>
+	<resultMap type="Message" id="getMessageCount">
+		<association property="sendUser" column="senduser_no" javaType="User" select="kr.co.fa.dao.UserDao.getUserByUserNo"/>
+	</resultMap>
+
+	<update id="messageCheck" parameterType="message">
+		update
+			message
+		set
+			message_check = 'Y'
+		where
+			senduser_no = #{sendUser.no}
+		and
+			receiveuser_no = #{receiveUser.no}
+	</update>
+	<select id="getMessageCount" parameterType="int" resultType="int">
+		select
+			count(MESSAGE_NO)
+		from
+			message
+		where
+			receiveuser_no = #{value} 
+		and
+			message_check = 'N'
+	</select>
+	<insert id="addMessage" parameterType="Message">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+			select message_seq.nextval from dual
+		</selectKey>
+		insert into message
+			(MESSAGE_NO, SENDUSER_NO, RECEIVEUSER_NO, MESSAGE_CONTENTS)
+		values
+			(#{no},#{sendUser.no},#{receiveUser.no},#{contents})
+	</insert>
+	<select id="getMessageByUserNo" parameterType="Message" resultMap="getMessageResultMap">
+		select
+			MESSAGE_NO,
+			SENDUSER_NO,
+			RECEIVEUSER_NO,
+			MESSAGE_CONTENTS,
+			MESSAGE_CREATE_DATE
+		from
+			message
+		where
+			(senduser_no,receiveuser_no) 
+		in
+			((#{sendUser.no},#{receiveUser.no}),(#{receiveUser.no},#{sendUser.no}))
+		order by
+			message_no 
+	</select>
+	
+	<select id="getReceiveMessageByUserNo" parameterType="int" resultMap="getMessageResultMap">
+		select
+			SENDUSER_NO
+		from
+			message 
+		WHERE
+			RECEIVEUSER_NO = #{value}
+		GROUP BY
+			SENDUSER_NO
+	</select>
+</mapper>

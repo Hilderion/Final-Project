@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.fa.dao.FriendDao">
+	
+	<resultMap type="FriendEvent" id="getFriendUserResultMap">
+		<id column="event_no" property="no"/>
+		<result column="event" property="event"/>
+		<result column="event_date" property="date"/>
+		<association property="user" column="user_no" javaType="User" select="kr.co.fa.dao.UserDao.getUserByUserNo"/>
+		<association property="friend" column="friend_no" javaType="User" select="kr.co.fa.dao.UserDao.getUserByUserNo"/>
+	</resultMap>
+	
+	<select id="getFriendRequestCount" parameterType="int" resultType="int">
+		select 
+			count(EVENT_NO)
+		from
+			friend_event
+		where
+			FRIEND_NO = #{value}
+		and
+			event = 'add'
+	</select>
+	<insert id="addExcFriend" parameterType="kr.co.fa.vo.ExcFriends">
+		insert into 
+			exc_friend
+				(user_no, exc_friend_no)
+			values	
+				(#{originUserNo}, #{excFriend.no})
+	</insert>
+	
+	<select id="getRecFriendsByUserNo" resultType="hashmap" parameterType="int">
+		select
+		    B.user_no as	userno,
+		    B.user_name as	username,
+		    B.user_profile as userprofile,
+		    B.user_address as useraddress,
+		    C.user_no as friendno,
+		    C.user_name as friendname,
+		    C.user_profile as friendprofile,
+		    C.user_address as friendaddress
+		from (select user_no, friend_no
+		      from friend
+		      where friend_no in (select user_no
+		                        from friend
+		                        where friend_no = #{value})
+		        and user_no not in (select exc_friend_no
+		                                from exc_friend
+		                                where user_no = #{value})  
+		        and user_no not in (select friend_no 
+                                      from friend
+                                      where user_no =#{value})
+                 and friend_no not in (select friend_no
+                                      from friend_event
+                                      where user_no = #{value})                     
+                 and user_no not in (select friend_no 
+                                      from friend
+                                      where user_no =#{value})                      
+                                                              
+		        and user_no !=  #{value}) A, sns_users B, sns_users C
+		 where
+		    A.user_no = B.user_no
+		and
+		    A.friend_no = C.user_no
+	
+	</select>
+	
+	<select id="getExcFriendsByUserNo" resultType="kr.co.fa.vo.ExcFriends" parameterType="int">
+		select
+			user_no		as no,
+			exc_friend_no	as "excFriend.no"
+		from
+			exc_friend
+		where
+			user_no = #{value}	
+	
+	</select>
+	
+	<select id="getUserByNo" resultType="User" parameterType="int">
+		select 
+			user_no          as no, 
+			user_name        as name,
+			user_email       as email,
+			user_password    as password,
+			user_birth       as birth, 
+			user_sex         as sex, 
+			user_available   as available, 
+			user_create_date as createDate,
+			user_education	 as education,
+			user_address	 as address,
+			user_profile	 as profile,
+			user_tel	     as tel,
+			page_name		 as pageName,
+			page_category	 as category
+		from 
+			sns_users
+		where
+			user_no = #{value}	
+	</select>
+	
+	<select id="getComplexFriends" resultType="User" parameterType="kr.co.fa.vo.ExcFriends">
+		select 
+			user_no          as no, 
+			user_name        as name,
+			user_email       as email,
+			user_password    as password,
+			user_birth       as birth, 
+			user_sex         as sex, 
+			user_available   as available, 
+			user_create_date as createDate,
+			user_education	 as education,
+			user_address	 as address,
+			user_profile	 as profile,
+			user_tel	     as tel,
+			page_name		 as pageName,
+			page_category	 as category
+		from 
+			sns_users
+		<where>
+			user_no not in 
+			<foreach item="item" index="index" collection="excFriends" open="(" separator="," close=")">
+				#{item.excFriend.no}
+			</foreach>
+			
+			and
+				user_no in
+			<foreach item="item" index="index" collection="recFreinds" open="(" separator="," close=")">
+				#{item.no}
+			</foreach>	
+		</where>	
+	</select>
+	
+	<select id="getComplexFriends2" resultType="User" parameterType="kr.co.fa.vo.ExcFriends">
+		select 
+			user_no          as no, 
+			user_name        as name,
+			user_email       as email,
+			user_password    as password,
+			user_birth       as birth, 
+			user_sex         as sex, 
+			user_available   as available, 
+			user_create_date as createDate,
+			user_education	 as education,
+			user_address	 as address,
+			user_profile	 as profile,
+			user_tel	     as tel,
+			page_name		 as pageName,
+			page_category	 as category
+		from 
+			sns_users
+		<where>
+				user_no in
+			<foreach item="item" index="index" collection="recFreinds" open="(" separator="," close=")">
+				#{item.no}
+			</foreach>	
+		</where>	
+	</select>
+	
+	<select id="getFriendsByUserNo" parameterType="int" resultType="User">
+		select 
+			A.user_no          as no, 
+			A.user_name        as name,
+			A.user_email       as email,
+			A.user_password    as password,
+			A.user_birth       as birth, 
+			A.user_sex         as sex, 
+			A.user_available   as available, 
+			A.user_create_date as createDate,
+			A.user_profile     as profile,
+			A.user_cover       as cover
+		from 
+			sns_users A, friend B
+		where
+			A.user_no = B.friend_no
+		and 
+			B.user_no = #{value}
+		
+	</select>
+	
+	<select id ="getFriendApply" parameterType="int" resultMap="getFriendUserResultMap">
+		select 
+			EVENT_NO,
+			USER_NO,
+			FRIEND_NO,
+			EVENT,
+			EVENT_DATE
+		from
+			friend_event
+		where
+			user_no = #{value}
+		and
+			event = 'add'
+	</select>
+	<select id ="getFriendRequest" parameterType="int" resultMap="getFriendUserResultMap">
+		select 
+			EVENT_NO,
+			USER_NO,
+			FRIEND_NO,
+			EVENT,
+			EVENT_DATE
+		from
+			friend_event
+		where
+			friend_no = #{value}
+		and
+			event = 'add'
+	</select>
+	
+
+	<delete id ="cancelAddFriendEvent" parameterType="FriendEvent">
+		delete from friend_event
+		where
+			user_no = #{user.no}
+		and
+			friend_no = #{friend.no}
+		and
+			event = #{event}
+	</delete>
+	<insert id = "addFriendEvent" parameterType="FriendEvent">
+		insert into friend_event
+			(event_no, user_no, friend_no, event, event_date)
+		values
+			(fri_event_seq.nextval, #{user.no}, #{friend.no}, #{event}, sysdate)
+	</insert>
+	<insert id = "addFriend" parameterType="Friend">
+		insert all
+			into friend (user_no, friend_no) values (#{user.no}, #{no})
+			into friend (user_no, friend_no) values (#{no}, #{user.no})
+		select * from dual	
+	</insert>
+	<delete id="delFriend" parameterType="Friend">
+		delete from friend
+		where 
+			(user_no, friend_no)
+		in
+			((#{user.no},#{no}),(#{no},#{user.no}))
+			
+	</delete>
+	<select id="getFollow" parameterType="Follow" resultType="Follow">
+		select
+			user_no				as "user.no",
+			friend_no			as no
+		from
+			follow
+		where
+			user_no		=	#{user.no}
+		and
+			friend_no	=	#{no}
+	</select>
+	<update id="updateFriend" parameterType="Friend">
+		update friend
+		set
+			ano_check	=	#{anoCheck}
+		where
+			user_no		=	#{user.no}
+		and
+			friend_no	=	#{no}
+	</update>
+	<insert id="addFollow" parameterType="Follow">
+		insert into follow
+			(user_no, friend_no)
+		values
+			(#{user.no}, #{no})
+	</insert>
+	<delete id="delFollow" parameterType="Follow">
+		delete from follow
+		where
+			user_no		=	#{user.no}
+		and
+			friend_no	=	#{no}
+	</delete>
+	<delete id="delFriendFollow" parameterType="Follow">
+		delete from follow
+		where 
+			(user_no, friend_no)
+		in
+			((#{user.no},#{no}),(#{no},#{user.no}))
+	</delete>
+	
+</mapper>
