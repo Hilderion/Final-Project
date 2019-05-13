@@ -16,6 +16,18 @@
 </head>
 
 <script>
+$(function(){
+	$('#log-button').on('click',function(){
+		if ($('#id_ar').val().length < 1 || $('#pw_ar').val().length <1) {
+			alert('ID 또는 PW는 필수 입력 사항입니다.');
+			$('#denine3').removeClass('hide');
+			return false;
+		}
+		
+	})
+	
+	
+})
 
 
 </script>
@@ -36,16 +48,16 @@
                 <div class="col-xs-8">
                   <div class="form-group">
                     <label for="" style="width:25px;">ID</label>
-                    <input type="text" name="id">
+                    <input type="text" name="id" id="id_ar">
                   </div>
                   <div class="form-group">
                     <label for="" style="width:25px;">PW</label>
-                    <input type="password" name="pwd">
+                    <input type="password" name="pwd" id="pw_ar">
                   </div>
                 </div>
                 <div class="col-xs-4">
                   <div class="form-group">
-                    <button class="btn btn-primary" style="width:90px; height:70px;">Sign In</button>
+                    <button id="log-button" class="btn btn-primary" style="width:90px; height:70px;">Sign In</button>
                   </div>
                 </div>
               </div>
@@ -53,10 +65,12 @@
             <c:if test="${param.login eq 'fail' }">
 	            <p id="denine" style="color:red; font-size:12px;">로그인이 필요한 페이지 입니다.</p>
             </c:if>
+            <p id="denine3" style="color:red; font-size:12px" class="hide"> ID 또는 PW를 입력해주세요.</p>
             <c:if test="${param.login eq 'exile' }">
 	            <p id="denine2" style="color:red; font-size:12px;">관리자 권한이 동결된 계정입니다.</p>
             </c:if>
             <p style="color:lightgrey; font-size:12px;">새 관리자 등록은 최고 관리자에게 문의하세요</p>
+            
           </div>
         </div>
 
