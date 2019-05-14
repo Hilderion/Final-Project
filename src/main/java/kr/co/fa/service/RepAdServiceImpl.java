@@ -89,18 +89,24 @@ public class RepAdServiceImpl implements RepAdService {
 
 	@Override
 	public RepAd getAcceptedAd() {
-		
+
 		List<RepAd> ads = adDao.getAllAdAccepted();
-		
+
 		if (ads == null) {
 			return null;
 		}
-		
+
 		Random rnd = new Random();
-		int rn = rnd.nextInt(ads.size());
+		int rn;
+		RepAd ad = null;
 		
-		RepAd ad = ads.get(rn);
-		
+		if (ads.size() >0) {
+			rn = rnd.nextInt(ads.size());
+			ad = ads.get(rn);
+		} else {
+			rn= 0;
+		}
+
 		return ad;
 	}
 
