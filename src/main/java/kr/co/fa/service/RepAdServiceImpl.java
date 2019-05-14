@@ -100,11 +100,9 @@ public class RepAdServiceImpl implements RepAdService {
 		int rn;
 		RepAd ad = null;
 		
-		if (ads.size() >0) {
+		if (ads.size() > 0) {
 			rn = rnd.nextInt(ads.size());
 			ad = ads.get(rn);
-		} else {
-			rn= 0;
 		}
 
 		return ad;
