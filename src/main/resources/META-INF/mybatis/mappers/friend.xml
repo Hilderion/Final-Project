@@ -40,7 +40,7 @@
 		    C.user_name as friendname,
 		    C.user_profile as friendprofile,
 		    C.user_address as friendaddress
-		from (select user_no, friend_no
+		from (select ROW_NUMBER () OVER (PARTITION BY user_no ORDER BY friend_no desc) as RNUM, user_no, friend_no
 		      from friend
 		      where friend_no in (select user_no
 		                        from friend
@@ -51,18 +51,15 @@
 		        and user_no not in (select friend_no 
                                       from friend
                                       where user_no =#{value})
-                 and friend_no not in (select friend_no
+                and friend_no not in (select friend_no
                                       from friend_event
-                                      where user_no = #{value})                     
-                 and user_no not in (select friend_no 
-                                      from friend
-                                      where user_no =#{value})                      
-                                                              
+                                      where user_no = #{value})                                          
 		        and user_no !=  #{value}) A, sns_users B, sns_users C
 		 where
 		    A.user_no = B.user_no
 		and
 		    A.friend_no = C.user_no
+		and A.RNUM = 1    
 	
 	</select>
 	
