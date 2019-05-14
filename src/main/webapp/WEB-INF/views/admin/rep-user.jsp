@@ -154,7 +154,7 @@ p label {
 										<option value="female"
 											${param.opt eq 'female' ? 'selected' : '' }>여자</option>
 									</select> <select name="status" id="status_check">
-										<option>정지여부</option>
+										<option>활동여부</option>
 										<option value="Y" ${param.status eq 'Y' ? 'selected' : '' }>Y</option>
 										<option value="N" ${param.status eq 'N' ? 'selected' : '' }>N</option>
 									</select>
