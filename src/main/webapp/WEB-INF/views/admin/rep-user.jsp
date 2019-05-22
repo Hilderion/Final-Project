@@ -58,10 +58,17 @@ p label {
 			$("#criteria_form").submit();
 		})
 		$("#type_check").on('change', function() {
-
+			if ($("#type_check").val() == "성별") {
+				return false;
+			}
+			
 			$("#criteria_form").submit();
 		})
 		$("#status_check").on('change', function() {
+			
+			if ($("#status_check").val() == "활동여부") {
+				return false;
+			}
 
 			$("#criteria_form").submit();
 		})
