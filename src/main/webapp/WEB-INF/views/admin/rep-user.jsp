@@ -39,12 +39,24 @@ p label {
 </head>
 <script>
 	$(function() {
-		$("li").on('click', function() {
+		$(".pagination li a").on('click', function() {
 
 			$("#cp_box").val($(this).val());
+			
+			if ($("#type_check option:selected").val() == "성별" && $("#status_check option:selected").val() == "활동여부") {
+				
+				if ( ${pagination.cp} == 1) {
+					location.href = 'http://localhost:8081/fa/admin/repuser?cp='+${pagination.cp +1};
+						
+				} else {
+					location.href = 'http://localhost:8081/fa/admin/repuser?cp='+${pagination.cp -1};
+				}
+				
+				return false;
+			}
+	
 			$("#criteria_form").submit();
 		})
-
 		$("#type_check").on('change', function() {
 
 			$("#criteria_form").submit();
